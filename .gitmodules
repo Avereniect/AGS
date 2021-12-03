@@ -1,0 +1,6 @@
+[submodule "external/AUL"]
+	path = external/AUL
+	url = https://github.com/Avereniect/AUL/
+[submodule "external/AVML"]
+	path = external/AVML
+	url = https://github.com/Avereniect/AVML/

@@ -7,7 +7,8 @@
 
 #include "IMG_image.hpp"
 
-#include "aul/containers/Matrix.hpp"
+#include <aul/Math.hpp>
+#include <aul/containers/Matrix.hpp>
 
 namespace ags::image {
 
@@ -124,16 +125,40 @@ namespace ags::image {
         // Mutators
         //=================================================
 
-        /*
+        ///
+        /// \param w New image width
+        /// \param h New image height
+        /// \param color Color to fill
         void resize(size_type w, size_type h, pixel_type color = {}) {
             if (!w || !h) {
                 clear();
                 return;
             }
 
-            //TODO: Complete implementation
+            size_type x_tiles = aul::divide_ceil(w, tile_size);
+            size_type y_tiles = aul::divide_ceil(h, tile_size);
+
+            tiles.resize({y_tiles, x_tiles}, nullptr);
+
+            //Allocate new memory for tiles
+            auto [old_y_tiles, old_x_tiles] = tiles.dimensions();
+            if (old_x_tiles < x_tiles || old_y_tiles < y_tiles) {
+                size_type allocation_size = tile_size * tile_size * C;
+                for (auto& tile: tiles) {
+                    if (!tile) {
+                        tile = new(std::align_val_t(image_alignment)) channel_type[allocation_size];
+                        for (std::uint32_t i = 0; i < tile_size * tile_size; ++i) {
+                            for (int j = 0; j < ; ++j) {
+
+                            }
+                        }
+                    }
+                }
+            }
+
+            base::w = w;
+            base::h = h;
         }
-        */
 
         void clear() {
             for (auto t : tiles) {

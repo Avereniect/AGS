@@ -148,8 +148,8 @@ namespace ags::image {
                     if (!tile) {
                         tile = new(std::align_val_t(image_alignment)) channel_type[allocation_size];
                         for (std::uint32_t i = 0; i < tile_size * tile_size; ++i) {
-                            for (int j = 0; j < ; ++j) {
-
+                            for (int j = 0; j < C; ++j) {
+                                tile[i * C + j] = color[j];
                             }
                         }
                     }

@@ -2,8 +2,8 @@
 // Created by avereniect on 11/27/21.
 //
 
-#ifndef AGS_AGS_TYPES_HPP
-#define AGS_AGS_TYPES_HPP
+#ifndef AGS_TYPES_HPP
+#define AGS_TYPES_HPP
 
 #include <cstdint>
 
@@ -101,4 +101,4 @@ namespace ags {
 
 }
 
-#endif //AGS_AGS_TYPES_HPP
+#endif //AGS_TYPES_HPP

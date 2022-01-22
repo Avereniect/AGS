@@ -2,7 +2,7 @@
 // Created by avereniect on 11/29/21.
 //
 
-#include "ags/AGS_types.hpp"
+#include "ags/Types.hpp"
 
 namespace ags {
 

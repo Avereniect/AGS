@@ -37,24 +37,59 @@ namespace ags::mesh {
     public:
 
         Fixed_vertex_array():
-            Fixed_vertex_array_base()
+            Fixed_vertex_array_base() {}
 
-        ~Fixed_vertex_array() = default;
+        ~Fixed_vertex_array() {
+            delete[] indices;
+            delete[] position;
+            delete[] normals;
+            delete[] tangents;
+            delete[] uv0;
+        }
 
-    private:
+        void load_indices(std::uint32_t*) {
 
-
+        }
 
     };
 
     class Fixed_vertex_array_view {
     public:
 
+        //=================================================
+        // -ctors
+        //=================================================
+
+        Fixed_vertex_array_view() = default;
+        Fixed_vertex_array_view(const Fixed_vertex_array_view& view) = default;
+        Fixed_vertex_array_view(Fixed_vertex_array_view&& view) = default;
+        ~Fixed_vertex_array_view() = default;
+
+        //=================================================
+        // Assignment Operators
+        //=================================================
+
+        Fixed_vertex_array_view& operator=(const Fixed_vertex_array_view&) = default;
+        Fixed_vertex_array_view& operator=(Fixed_vertex_array_view&&) = default;
+
+        //=================================================
+        // Loading
+        //=================================================
+
+        void load_indices();
+
 
 
     private:
 
+        std::uint32_t num_indices = 0;
+        const std::uint32_t index_ptr;
 
+        std::uint32_t num_vertices = 0;
+        const float* position_ptr = nullptr;
+        const float* normal_ptr = nullptr;
+        const float* tangent_ptr = nullptr;
+        const float* uv0_ptr = nullptr;
 
     };
 

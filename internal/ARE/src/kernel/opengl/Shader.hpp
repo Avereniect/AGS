@@ -2,15 +2,16 @@
 // Created by avereniect on 1/12/22.
 //
 
-#ifndef AGS_GL33_SHADER_HPP
-#define AGS_GL33_SHADER_HPP
+#ifndef AGS_GL43_SHADER_HPP
+#define AGS_GL43_SHADER_HPP
 
 #include "Object.hpp"
+
 #include <glad/glad.h>
 
 #include <string>
 
-namespace ags::are::gl33 {
+namespace ags::are::gl43 {
 
     class Shader : public Object {
     public:
@@ -35,4 +36,4 @@ namespace ags::are::gl33 {
 
 }
 
-#endif //AGS_GL33_SHADER_HPP
+#endif //AGS_GL43_SHADER_HPP

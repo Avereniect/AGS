@@ -13,7 +13,7 @@
 #define AVML_AVX512BW
 #include "avml/AVML.hpp"
 
-#include <ags/image/IMG_pixel_buffer.hpp>
+#include <ags/image/Pixel_buffer.hpp>
 
 namespace ags::apt {
 

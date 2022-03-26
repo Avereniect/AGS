@@ -2,12 +2,12 @@
 // Created by avereniect on 1/9/22.
 //
 
-#ifndef AGS_GL33_OBJECT_HPP
-#define AGS_GL33_OBJECT_HPP
+#ifndef AGS_GL43_OBJECT_HPP
+#define AGS_GL43_OBJECT_HPP
 
 #include <glad/glad.h>
 
-namespace ags::are::gl33 {
+namespace ags::are::gl43 {
 
     class Object {
     public:
@@ -39,4 +39,4 @@ namespace ags::are::gl33 {
 
 }
 
-#endif //AGS_GL33_OBJECT_HPP
+#endif //AGS_GL43_OBJECT_HPP

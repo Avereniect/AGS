@@ -52,20 +52,41 @@ namespace ags::are {
     };
 
     enum class Depth_format : std::uint8_t {
-        NULL_DEPTH_FORMAT,
-        INT24,
-        FLOAT32
+        NULL_DEPTH_FORMAT = 0x00,
+        INT24 = 0x02,
+        FLOAT32 = 0x04
+    };
+
+    enum class Stencil_format : std::uint8_t {
+        NULL_STENCIL_FORMAT = 0x00,
+        STENCIL8 = 0x01
     };
 
     enum class Depth_stencil_format : std::uint8_t {
-        NULL_DEPTH_FORMAT,
-        INT24,
-        FLOAT32,
+        NULL_DEPTH_STENCIL_FORMAT = 0x00,
+        INT24 = 0x02,
+        FLOAT32 = 0x04,
 
-        STENCIL8,
+        STENCIL8 = 0x01,
 
-        INT24_STENCIL8,
-        FLOAT32_STENCIL8
+        INT24_STENCIL8 = 0x03,
+        FLOAT32_STENCIL8 = 0x05
+    };
+
+    Depth_stencil_format to_depth_stencil_format(Depth_format);
+    Depth_stencil_format to_depth_stencil_format(Stencil_format);
+    Depth_stencil_format to_depth_stencil_format(Depth_stencil_format, Stencil_format);
+
+    Depth_format to_depth_format(Depth_stencil_format);
+    Stencil_format to_stencil_format(Depth_stencil_format);
+
+    enum class Sample_count : std::uint8_t {
+        S1,
+        S2,
+        S4,
+        S8,
+        S16,
+        S32
     };
 
 }

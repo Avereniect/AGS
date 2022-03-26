@@ -12,6 +12,9 @@
 
 namespace ags {
 
+    ///
+    /// Enum representing for which purpose a queue family is best suited for
+    ///
     enum class Queue_type {
         NULL_QUEUE_TYPE,
         GRAPHICS,
@@ -19,6 +22,9 @@ namespace ags {
         TRANSFER
     };
 
+    ///
+    /// Struct wrapping around
+    ///
     struct Queue_family {
 
         //=================================================
@@ -71,11 +77,11 @@ namespace ags {
 
     };
 
+    /*
     struct Graphics_device {
         vk::Device handle;
         vk::PhysicalDevice physical_device;
 
-        //
         //vk::Queue display_queue;
         //std::uint32_t display_queue_index;
 
@@ -95,7 +101,12 @@ namespace ags {
         vk::Queue compute_queue;
         vk::Queue transfer_queue;
     };
+    */
 
+    ///
+    /// Class which manages Vulkan instance and associated state used by windows
+    /// in the ui and ARE modules.
+    ///
     class Vulkan_context {
     public:
 
@@ -103,7 +114,12 @@ namespace ags {
         // State methods
         //=================================================
 
+        ///
+        /// Perhaps setup work required for use by ARE and ui modules.
+        ///
+        ///
         static void init();
+
         static void term();
 
         //=================================================
@@ -128,11 +144,26 @@ namespace ags {
         ///
         static VkSurfaceKHR dummy_surface;
 
-        static Graphics_device graphics_device;
+        ///
+        /// Device which should be used for the purpose of rendering graphics.
+        ///
+        //static Graphics_device graphics_device;
 
-        static Compute_device heavy_compute_device;
-        static Compute_device light_compute_device;
+        ///
+        /// Device which should be used for performing heavy general-purpose
+        /// compute tasks.
+        ///
+        //static Compute_device heavy_compute_device;
 
+        ///
+        /// Device which should be used for light-weight general-purpose compute
+        /// tasks.
+        ///
+        //static Compute_device light_compute_device;
+
+        ///
+        /// List of physical devices which were available when init() was called
+        ///
         static std::vector<Physical_device> physical_devices;
 
         ///
@@ -140,6 +171,9 @@ namespace ags {
         ///
         static std::vector<const char*> required_extensions;
 
+        ///
+        /// Format used for displaying on window
+        ///
         static vk::SurfaceFormatKHR surface_format;
 
         ///
@@ -147,12 +181,21 @@ namespace ags {
         ///
         static std::vector<vk::SurfaceFormatKHR> surface_formats;
 
+        ///
+        /// Presentation mode which will be used by windows
+        ///
         static vk::PresentModeKHR present_mode;
 
+        ///
+        /// List of required device extensions
+        ///
         static constexpr std::array<const char*, 1> graphics_device_extensions{
             "VK_KHR_swapchain"
         };
 
+        ///
+        /// List of required instance extensions
+        ///
         static constexpr std::array<const char*, 1> validation_layers{
             "VK_LAYER_KHRONOS_validation"
         };
@@ -205,10 +248,6 @@ namespace ags {
         /// Populates dummy_window and dummy_surface
         ///
         static void create_dummy_window();
-
-        static void select_surface_format();
-
-        static void select_present_mode();
 
     };
 

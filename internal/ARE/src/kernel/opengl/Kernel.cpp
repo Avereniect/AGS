@@ -3,7 +3,7 @@
 //
 #include "Kernel.hpp"
 
-namespace ags::are::gl33 {
+namespace ags::are::gl43 {
 
     std::priority_queue<Draw_call> Kernel::render_queue{};
 

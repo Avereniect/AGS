@@ -2,8 +2,13 @@
 // Created by avereniect on 1/13/22.
 //
 
-#ifndef AGS_DRAW_CALL_HPP
-#define AGS_DRAW_CALL_HPP
+#ifndef AGS_ARE_VK10_DRAW_CALL_HPP
+#define AGS_ARE_VK10_DRAW_CALL_HPP
+
+#include "Includes.hpp"
+
+#include "Mesh.hpp"
+#include "Shader.hpp"
 
 namespace ags::are::vk10 {
 
@@ -13,4 +18,4 @@ namespace ags::are::vk10 {
 
 }
 
-#endif //AGS_DRAW_CALL_HPP
+#endif //AGS_ARE_VK10_DRAW_CALL_HPP

@@ -7,6 +7,9 @@
 
 namespace ags {
 
+    ///
+    /// A class managing the core functionality of 
+    ///
     class Engine {
     public:
 
@@ -19,6 +22,9 @@ namespace ags {
         ///     otherwise. May be false if engine was already initialized
         static bool init();
 
+        ///
+        /// Releases all resources acquired during initialization
+        ///
         static void term();
 
     private:

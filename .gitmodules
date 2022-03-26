@@ -4,3 +4,21 @@
 [submodule "external/AVML"]
 	path = external/AVML
 	url = https://github.com/Avereniect/AVML/
+[submodule "external/AVEL"]
+	path = external/AVEL
+	url = https://github.com/Avereniect/AVEL
+[submodule "external/shaderc"]
+	path = external/shaderc
+	url = https://github.com/google/shaderc/
+[submodule "external/SPIRV-Tools"]
+	path = external/SPIRV-Tools
+	url = https://github.com/KhronosGroup/SPIRV-Tools.git
+[submodule "external/SPIRV-Headers"]
+	path = external/SPIRV-Headers
+	url = https://github.com/KhronosGroup/SPIRV-Headers.git
+[submodule "external/glslang"]
+	path = external/glslang
+	url = https://github.com/KhronosGroup/glslang.git
+[submodule "external/SPIRV-Reflect"]
+	path = external/SPIRV-Reflect
+	url = https://github.com/KhronosGroup/SPIRV-Reflect.git

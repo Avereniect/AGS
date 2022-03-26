@@ -3,7 +3,7 @@
 //
 #include "Mesh_kernel.hpp"
 
-namespace ags::are::gl33 {
+namespace ags::are::gl43 {
 
     std::vector<GLuint> Mesh_kernel::mesh_garbage{};
     std::vector<GLuint> Mesh_kernel::mesh_pool{};

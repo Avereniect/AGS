@@ -2,18 +2,17 @@
 // Created by avereniect on 1/1/22.
 //
 
-#ifndef AGS_GL33_KERNEL_HPP
-#define AGS_GL33_KERNEL_HPP
+#ifndef AGS_GL43_KERNEL_HPP
+#define AGS_GL43_KERNEL_HPP
 
 #include "Mesh.hpp"
 #include "Shader.hpp"
-
-#include <glad/glad.h>
+#include "Draw_call.hpp"
 
 #include <cstdint>
 #include <queue>
 
-namespace ags::are::gl33 {
+namespace ags::are::gl43 {
     ///
     /// Class wrapping around OpenGL 3.3 state
     ///

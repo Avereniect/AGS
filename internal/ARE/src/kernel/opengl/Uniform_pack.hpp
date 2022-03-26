@@ -2,12 +2,12 @@
 // Created by avereniect on 1/12/22.
 //
 
-#ifndef AGS_UNIFORM_PACK_HPP
-#define AGS_UNIFORM_PACK_HPP
+#ifndef AGS_GL43_UNIFORM_PACK_HPP
+#define AGS_GL43_UNIFORM_PACK_HPP
 
 #include "../Enums.hpp"
 
-namespace ags::are::gl33 {
+namespace ags::are::gl43 {
 
     struct Uniform_header {
         Uniform_type type = Uniform_type::NULL_UNIFORM_TYPE;
@@ -29,4 +29,4 @@ namespace ags::are::gl33 {
 
 }
 
-#endif //AGS_UNIFORM_PACK_HPP
+#endif //AGS_GL43_UNIFORM_PACK_HPP

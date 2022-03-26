@@ -17,8 +17,7 @@ namespace ags {
             return false;
         }
 
-        Windowing_context::init();
-        Vulkan_context::init();
+        ags::Windowing_context::init();
         are::ARE::init();
 
         is_initialized = true;
@@ -31,7 +30,6 @@ namespace ags {
         }
 
         are::ARE::term();
-        Vulkan_context::term();
         Windowing_context::term();
 
         is_initialized = false;

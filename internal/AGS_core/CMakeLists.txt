@@ -1,13 +1,13 @@
 cmake_minimum_required(VERSION 3.16)
 
+if (${AGS_RENDER_API} STREQUAL "Vulkan10")
+    set(context_source_files "src/Vulkan_context.hpp" "src/Vulkan_context.cpp")
+elseif(${AGS_RENDER_API} STREQUAL "OpenGL43")
+    set(context_source_files)
+endif()
+
 add_library(AGS_core STATIC
     src/Types.cpp
-
-    src/Core.hpp
-    src/Core.cpp
-
-    src/Vulkan_context.hpp
-    src/Vulkan_context.cpp
 
     src/Windowing_context.hpp
     src/Windowing_context.cpp

@@ -4,7 +4,9 @@
 
 #include "ARE.hpp"
 
-//#include "kernel/GL33/Kernel.hpp"
+#ifdef AGS_OPENGL43
+#include "kernel/opengl/Kernel.hpp"
+#endif
 
 namespace ags::are {
 
@@ -15,8 +17,11 @@ namespace ags::are {
             return false;
         }
 
-        //gl33::Kernel::init();
+        #if defined(AGS_VULKAN10)
         vk10::Kernel::init();
+        #elif defined(AGS_OPENGL43)
+        gl43::Kernel::init();
+        #endif
 
         is_initialized = true;
         return true;
@@ -27,8 +32,11 @@ namespace ags::are {
             return;
         }
 
-        //gl33::Kernel::term();
+        #if defined(AGS_VULKAN10)
         vk10::Kernel::term();
+        #elif defined(AGS_OPENGL43)
+        gl43::Kernel::term();
+        #endif
 
         is_initialized = false;
     }

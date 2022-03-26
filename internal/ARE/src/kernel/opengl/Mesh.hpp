@@ -2,14 +2,14 @@
 // Created by avereniect on 1/1/22.
 //
 
-#ifndef AGS_GL33_MESH_HPP
-#define AGS_GL33_MESH_HPP
+#ifndef AGS_GL43_MESH_HPP
+#define AGS_GL43_MESH_HPP
 
 #include "Object.hpp"
 
 #include <ags/Mesh.hpp>
 
-namespace ags::are::gl33 {
+namespace ags::are::gl43 {
 
     class Mesh : public Object {
     public:
@@ -62,4 +62,4 @@ namespace ags::are::gl33 {
 
 }
 
-#endif //AGS_GL33_MESH_HPP
+#endif //AGS_GL43_MESH_HPP

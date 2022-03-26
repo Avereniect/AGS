@@ -2,31 +2,35 @@
 // Created by avereniect on 1/9/22.
 //
 
-#ifndef AGS_VK10_KERNEL_HPP
-#define AGS_VK10_KERNEL_HPP
+#ifndef AGS_ARE_VK10_KERNEL_HPP
+#define AGS_ARE_VK10_KERNEL_HPP
+
+#include "Includes.hpp"
 
 #include "Kernel_base.hpp"
-
-#include <vulkan/vulkan.h>
+#include "Device_kernel.hpp"
 
 #include <vector>
 #include <string>
 
 namespace ags::are::vk10 {
 
-    class Kernel {
+    class Kernel :
+        public Device_kernel {
     public:
 
         //=================================================
-        // -ctors
+        // State methods
         //=================================================
 
         static bool init();
         static void term();
 
         //=================================================
-        // Assignment operators
+        // Draw methods
         //=================================================
+
+        void draw();
 
     private:
 
@@ -44,4 +48,4 @@ namespace ags::are::vk10 {
 
 }
 
-#endif //AGS_VK10_KERNEL_HPP
+#endif //AGS_ARE_VK10_KERNEL_HPP

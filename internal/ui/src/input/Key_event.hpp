@@ -38,7 +38,17 @@ namespace ags::ui {
         W,
         X,
         Y,
-        Z
+        Z,
+        ZERO,
+        ONE,
+        TWO,
+        THREE,
+        FOUR,
+        FIVE,
+        SIX,
+        SEVEN,
+        EIGHT,
+        NINE
     };
 
     struct Key_event {

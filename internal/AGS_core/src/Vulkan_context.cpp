@@ -78,10 +78,6 @@ namespace ags {
     GLFWwindow* Vulkan_context::dummy_window = nullptr;
     VkSurfaceKHR Vulkan_context::dummy_surface{};
 
-    Graphics_device Vulkan_context::graphics_device{};
-    Compute_device Vulkan_context::heavy_compute_device{};
-    Compute_device Vulkan_context::light_compute_device{};
-
     std::vector<Physical_device> Vulkan_context::physical_devices{};
 
     std::vector<const char*> Vulkan_context::required_extensions{};
@@ -103,13 +99,9 @@ namespace ags {
         create_dummy_window();
         retrieve_physical_devices();
         create_graphics_device(select_graphics_device());
-        select_surface_format();
     }
 
     void Vulkan_context::term() {
-        graphics_device.handle.destroy();
-        heavy_compute_device.handle.destroy();
-        light_compute_device.handle.destroy();
     }
 
     void Vulkan_context::create_instance() {
@@ -208,8 +200,6 @@ namespace ags {
     }
 
     void Vulkan_context::create_graphics_device(const Physical_device& d) {
-        graphics_device.physical_device = d.handle;
-
         std::vector<vk::DeviceQueueCreateInfo> queue_create_infos{};
         queue_create_infos.reserve(d.queue_families.size());
 
@@ -320,35 +310,6 @@ namespace ags {
         if (r != VK_SUCCESS) {
             throw std::runtime_error("Failed to create dummy window surface");
         }
-    }
-
-    void Vulkan_context::select_surface_format() {
-        std::uint32_t num_formats;
-        vkGetPhysicalDeviceSurfaceFormatsKHR(
-            graphics_device.physical_device,
-            dummy_surface,
-            &num_formats,
-            nullptr
-        );
-
-        surface_formats = graphics_device.physical_device.getSurfaceFormatsKHR(dummy_surface);
-
-        for (const auto& f : surface_formats) {
-            bool cond =
-                f.colorSpace == vk::ColorSpaceKHR::eSrgbNonlinear &&
-                f.format == vk::Format::eB8G8R8A8Srgb;
-
-            if (cond) {
-                surface_format = f;
-                return;
-            }
-        }
-
-        throw std::runtime_error("Unable to find required surface format");
-    }
-
-    void Vulkan_context::select_present_mode() {
-        present_mode = vk::PresentModeKHR::eFifo;
     }
 
 }

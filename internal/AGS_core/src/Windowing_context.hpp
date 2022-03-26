@@ -7,11 +7,22 @@
 
 namespace ags {
 
+    ///
+    /// Class managing GLFW windowing library.
+    ///
+    /// Must be initialized before usage of windows from ui module
+    ///
     class Windowing_context {
     public:
 
+        ///
+        /// Initialize GLFW library. Set up error callback
+        ///
         static void init();
 
+        ///
+        /// Terminate GLFW library.
+        ///
         static void term();
 
         static void poll_events();

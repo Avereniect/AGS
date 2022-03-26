@@ -5,7 +5,7 @@
 
 #include <utility>
 
-namespace ags::are::gl33 {
+namespace ags::are::gl43 {
 
     Object::Object(Object&& other) noexcept:
         id(std::exchange(other.id, 0)) {}

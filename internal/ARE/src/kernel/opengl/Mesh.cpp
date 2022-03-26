@@ -4,7 +4,7 @@
 #include "Mesh.hpp"
 #include <glad/glad.h>
 
-namespace ags::are::gl33 {
+namespace ags::are::gl43 {
 
     Mesh::~Mesh() {
         unload();

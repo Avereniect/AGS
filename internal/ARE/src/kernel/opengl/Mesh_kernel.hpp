@@ -2,14 +2,14 @@
 // Created by avereniect on 1/9/22.
 //
 
-#ifndef AGS_GL33_MESH_KERNEL_HPP
-#define AGS_GL33_MESH_KERNEL_HPP
+#ifndef AGS_GL43_MESH_KERNEL_HPP
+#define AGS_GL43_MESH_KERNEL_HPP
 
 #include <glad/glad.h>
 
 #include <vector>
 
-namespace ags::are::gl33 {
+namespace ags::are::gl43 {
 
     class Mesh_kernel {
     public:
@@ -26,4 +26,4 @@ namespace ags::are::gl33 {
 
 }
 
-#endif //AGS_GL33_MESH_KERNEL_HPP
+#endif //AGS_GL43_MESH_KERNEL_HPP

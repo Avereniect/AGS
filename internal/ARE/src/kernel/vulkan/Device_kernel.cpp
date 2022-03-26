@@ -10,12 +10,13 @@ namespace ags::are::vk10 {
     // Static members
     //=====================================================
 
-    vk::Device Device_kernel::graphics_device;
-    vk::Queue Device_kernel::graphics_work_queue;
-    vk::Queue Device_kernel::graphics_compute_queue;
-    vk::Queue Device_kernel::graphics_transfer_queue;
+    Graphics_device Device_kernel::graphics_device{};
 
-    std::vector<Physical_device> Device_kernel::physical_devices;
+    Compute_device Device_kernel::heavy_compute_device{};
+
+    Compute_device Device_kernel::light_compute_device{};
+
+    std::vector<Physical_device> Device_kernel::physical_devices{};
 
     //=====================================================
     // State methods
@@ -23,13 +24,38 @@ namespace ags::are::vk10 {
 
     bool Device_kernel::init() {
         retrieve_physical_devices();
-        graphics_device = create_graphics_device(select_graphics_device());
+        create_graphics_device(select_graphics_device());
+        //create_heavy_compute_device(select_heavy_compute_device());
+        //create_light_compute_device(select_light_compute_device());
+
         return false;
     }
 
     void Device_kernel::term() {
-        graphics_device.destroy();
+        graphics_device.handle.destroy();
+        heavy_compute_device.handle.destroy();
+        light_compute_device.handle.destroy();
     }
+
+    //=====================================================
+    // Accessors
+    //=====================================================
+
+    const Graphics_device& Device_kernel::get_graphics_device() {
+        return graphics_device;
+    }
+
+    const Compute_device& Device_kernel::get_heavy_compute_device() {
+        return heavy_compute_device;
+    }
+
+    const Compute_device& Device_kernel::get_light_compute_device() {
+        return light_compute_device;
+    }
+
+    //=====================================================
+    // Helper functions
+    //=====================================================
 
     void Device_kernel::retrieve_physical_devices() {
         std::vector<VkPhysicalDevice> tmp;
@@ -40,6 +66,10 @@ namespace ags::are::vk10 {
             &physical_device_count,
             nullptr
         );
+
+        if (physical_device_count == 0) {
+            throw std::runtime_error("No physical devices could be retrieved.");
+        }
 
         tmp.resize(physical_device_count);
         vkEnumeratePhysicalDevices(
@@ -56,20 +86,56 @@ namespace ags::are::vk10 {
     }
 
     Physical_device Device_kernel::select_graphics_device() {
-        std::vector<Physical_device> candidates;
+        std::vector<std::reference_wrapper<const Physical_device>> candidates;
         for (const auto& d : physical_devices) {
-            if (is_suitable_render_device(d)) {
+            if (is_suitable_graphics_device(d)) {
                 candidates.emplace_back(d);
             }
         }
 
         if (candidates.empty()) {
-            //TODO: Log or do something more. Throw an exception?
-            return {};
+            throw std::runtime_error("No devices were suitable for rendering graphics.");
         } else {
+            //TODO: Select most suitable device
             return candidates[0];
         }
     }
+
+    /*
+    Physical_device Device_kernel::select_heavy_compute_device() {
+        std::vector<std::reference_wrapper<const Physical_device>> candidates;
+        for (const auto& d : physical_devices) {
+            if (is_suitable_heavy_compute_device(d)) {
+                candidates.emplace_back(d);
+            }
+        }
+
+        if (candidates.empty()) {
+            throw std::runtime_error("No devices were suitable for use as a heavy compute deivce");
+        } else {
+            //TODO: Select most suitable device
+            return candidates[0];
+        }
+    }
+    */
+
+    /*
+    Physical_device Device_kernel::select_light_compute_device() {
+        std::vector<std::reference_wrapper<const Physical_device>> candidates;
+        for (const auto& d : physical_devices) {
+            if (is_suitable_light_compute_device(d)) {
+                candidates.emplace_back(d);
+            }
+        }
+
+        if (candidates.empty()) {
+            throw std::runtime_error("No devices were suitable for use as a heavy compute deivce");
+        } else {
+            //TODO: Select most suitable device
+            return candidates[0];
+        }
+    }
+    */
 
     void Device_kernel::create_graphics_device(const Physical_device& d) {
         std::vector<vk::DeviceQueueCreateInfo> queue_create_infos{};
@@ -82,7 +148,7 @@ namespace ags::are::vk10 {
             queue_create_infos.emplace_back(
                 vk::DeviceQueueCreateFlagBits{},
                 i,
-                1, //TODO: Verify that one is enough
+                1, //TODO: Use more queues on certain GPU micro-architectures
                 &priority
             );
         }
@@ -93,35 +159,38 @@ namespace ags::are::vk10 {
             queue_create_infos.data(),
             0,
             nullptr,
-            0,
-            nullptr
+            graphics_device_extensions.size(),
+            graphics_device_extensions.data()
         };
 
-        graphics_device = d.handle.createDevice(device_create_info);
+        graphics_device.handle = d.handle.createDevice(device_create_info);
+        graphics_device.physical_device = d.handle;
 
         for (std::uint32_t i = 0; i < d.queue_families.size(); ++i) {
             if (d.queue_families[i].type == Queue_type::GRAPHICS) {
-                graphics_work_queue = graphics_device.getQueue(i, 0);
+                graphics_device.graphics_queue = graphics_device.handle.getQueue(i, 0);
+                graphics_device.graphics_queue_index = i;
                 break;
             }
         }
 
         for (std::uint32_t i = 0; i < d.queue_families.size(); ++i) {
             if (d.queue_families[i].type == Queue_type::COMPUTE) {
-                graphics_compute_queue = graphics_device.getQueue(i, 0);
-                break;
+                graphics_device.compute_queue = graphics_device.handle.getQueue(i, 0);
+                graphics_device.graphics_queue_index = i;
             }
         }
 
         for (std::uint32_t i = 0; i < d.queue_families.size(); ++i) {
             if (d.queue_families[i].type == Queue_type::TRANSFER) {
-                graphics_transfer_queue = graphics_device.getQueue(i, 0);
+                graphics_device.transfer_queue = graphics_device.handle.getQueue(i, 0);
+                graphics_device.transfer_queue_index = i;
                 break;
             }
         }
     }
 
-    bool Device_kernel::is_suitable_render_device(const Physical_device& d) {
+    bool Device_kernel::is_suitable_graphics_device(const Physical_device& d) {
         // Ensure device is some kind of GPU
         // Avoid CPU and other devices.
         switch (d.properties.deviceType) {
@@ -132,6 +201,28 @@ namespace ags::are::vk10 {
         case vk::PhysicalDeviceType::eCpu:
         case vk::PhysicalDeviceType::eOther:
         default:
+            return false;
+        }
+
+        //Check that physical device supports required surface format
+        //Note: It is assumed that if the device supports a particular format
+        // for the dummy surface then it supports that format for all surfaces.
+        std::uint32_t format_count;
+        auto t0 = d.handle.getSurfaceFormatsKHR(dummy_surface, &format_count, nullptr);
+
+        std::vector<vk::SurfaceFormatKHR> formats;
+        formats.resize(format_count);
+        auto t1 = d.handle.getSurfaceFormatsKHR(dummy_surface, &format_count, formats.data());
+
+        bool required_format_found = false;
+        for (auto f : formats) {
+            if (f == surface_format) {
+                required_format_found = true;
+                break;
+            }
+        }
+
+        if (!required_format_found) {
             return false;
         }
 

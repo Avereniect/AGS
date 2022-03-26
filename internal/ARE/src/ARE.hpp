@@ -8,7 +8,9 @@
 #include <cstdint>
 #include <memory>
 
+#ifdef AGS_VULKAN10
 #include "kernel/vulkan/Kernel.hpp"
+#endif
 
 namespace ags::are {
 
@@ -34,6 +36,10 @@ namespace ags::are {
         static bool is_initialized;
 
     };
+
+    #ifdef AGS_VULKAN10
+    using Kernel = ags::are::vk10::Kernel;
+    #endif
 
 }
 

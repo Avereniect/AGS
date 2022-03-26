@@ -2,58 +2,73 @@
 // Created by avereniect on 1/9/22.
 //
 
-#ifndef AGS_DEVICE_KERNEL_HPP
-#define AGS_DEVICE_KERNEL_HPP
+#ifndef AGS_ARE_VK10_DEVICE_KERNEL_HPP
+#define AGS_ARE_VK10_DEVICE_KERNEL_HPP
+
+#include "Includes.hpp"
 
 #include "Kernel_base.hpp"
 #include "Device.hpp"
 
-#include <vulkan/vulkan.hpp>
-
-#include <vector>
 #include <cstdint>
+#include <array>
+#include <vector>
 
 namespace ags::are::vk10 {
 
-    class Device_kernel : public Kernel_base{
+    class Device_kernel : public Kernel_base {
     public:
 
-        static bool init();
+        //=================================================
+        // State methods
+        //=================================================
 
+        static bool init();
         static void term();
 
-    private:
+        //=================================================
+        // Accessors
+        //=================================================
+
+        static const Graphics_device& get_graphics_device();
+
+        static const Compute_device& get_heavy_compute_device();
+
+        static const Compute_device& get_light_compute_device();
+
+    protected:
 
         //=================================================
         // Instance members
         //=================================================
 
         ///
-        /// Device used for rendering.
+        /// Device which is used for the purpose of rendering and presenting
+        /// graphics.
         ///
-        static vk::Device graphics_device;
+        static Graphics_device graphics_device;
 
         ///
-        /// Queue used for submitting rendering work.
+        /// Device which is used for performing heavy computational tasks
         ///
-        static vk::Queue graphics_work_queue;
+        static Compute_device heavy_compute_device;
 
         ///
-        /// Queue used for submitting compute tasks supporting the rendering
-        /// process.
+        /// Device which is used for performing light computational tasks
         ///
-        static vk::Queue graphics_compute_queue;
-
-        ///
-        /// Queue use for submitting transfer tasks supporting the rendering
-        /// process.
-        ///
-        static vk::Queue graphics_transfer_queue;
+        static Compute_device light_compute_device;
 
         ///
         /// A list of all physical devices available.
         ///
         static std::vector<Physical_device> physical_devices;
+
+        ///
+        /// List of device extensions required by graphics device
+        ///
+        static constexpr std::array<const char*, 1> graphics_device_extensions {
+            "VK_KHR_swapchain"
+        };
 
         //=================================================
         // Helper functions
@@ -73,6 +88,16 @@ namespace ags::are::vk10 {
         static Physical_device select_graphics_device();
 
         ///
+        /// \return Optimal physical device to use for heavy general-purpose
+        /// compute tasks
+        static Physical_device select_heavy_compute_device();
+
+        ///
+        /// \return Optimal physical device to use for light general-purpose
+        /// compute tasks
+        static Physical_device select_light_compute_device();
+
+        ///
         /// Create logical device used for rendering graphics and associated
         /// queues.
         ///
@@ -80,15 +105,43 @@ namespace ags::are::vk10 {
         static void create_graphics_device(const Physical_device& d);
 
         ///
+        /// Create logical device used for heavy general-purpose compute tasks.
+        ///
+        /// \param d Physical device to use as heavy compute device
+        static void create_heavy_compute_device(const Physical_device& d);
+
+        ///
+        /// Create logical device used for light general-purpose compute tasks.
+        ///
+        /// \param d PHysical device to use as a light compute device
+        static void create_light_compute_device(const Physical_device& d);
+
+        ///
         /// Predicate function used to determine whether a particular device is
-        /// suitable for rendering graphics.]
+        /// suitable for rendering graphics.
         ///
         /// \param d physical device to check suitability of
         /// \return True if device is suitable to render graphics with
-        static bool is_suitable_render_device(const Physical_device& d);
+        static bool is_suitable_graphics_device(const Physical_device& d);
+
+        ///
+        /// Predicate function used to determine whether a particular device is
+        /// suitable for use as a heavy compute device
+        ///
+        /// \param d Physical device to check suitability of
+        /// \return True if device is suitable for use as a heavy compute device
+        static bool is_suitable_heavy_compute_device(const Physical_device& d);
+
+        ///
+        /// Predicate function used to determine whether a particular device is
+        /// suitable for use as a light compute device
+        ///
+        /// \param d Physical device to check suitability of
+        /// \return True if device is suitable for use as a light compute device
+        static bool is_suitable_light_compute_device(const Physical_device& d);
 
     };
 
 }
 
-#endif //AGS_DEVICE_KERNEL_HPP
+#endif //AGS_ARE_VK10_DEVICE_KERNEL_HPP

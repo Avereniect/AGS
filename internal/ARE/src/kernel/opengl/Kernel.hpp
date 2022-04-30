@@ -8,6 +8,7 @@
 #include "Mesh.hpp"
 #include "Shader.hpp"
 #include "Draw_call.hpp"
+#include "Render_queue.hpp"
 
 #include <cstdint>
 #include <queue>
@@ -42,6 +43,10 @@ namespace ags::are::gl43 {
         /// Issues draw calls contained within queue
         ///
         static void draw_frame();
+
+        ///
+        /// \param render_queue
+        static void submit_render_queue(const Render_queue& render_queue);
 
     private:
 

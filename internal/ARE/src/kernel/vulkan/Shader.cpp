@@ -211,7 +211,7 @@ namespace ags::are::vk10 {
             &Shader_kernel::default_color_blend_state_create_info,
             &Shader_kernel::dynamic_state_create_info,
             vk::PipelineLayout{},
-            vk::RenderPass{}, //TODO: Pass appropriate renderpass,
+            framebuffer.render_pass,
             0 //Subpass
         };
 
@@ -227,6 +227,10 @@ namespace ags::are::vk10 {
     //void Shader::unload();
 
     Shader_program::operator bool() const {
+        return pipeline;
+    }
+
+    Shader_program::operator vk::Pipeline() const {
         return pipeline;
     }
 

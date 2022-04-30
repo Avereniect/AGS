@@ -75,10 +75,12 @@ namespace ags::are {
 
     Depth_stencil_format to_depth_stencil_format(Depth_format);
     Depth_stencil_format to_depth_stencil_format(Stencil_format);
-    Depth_stencil_format to_depth_stencil_format(Depth_stencil_format, Stencil_format);
+    Depth_stencil_format to_depth_stencil_format(Depth_format, Stencil_format);
 
     Depth_format to_depth_format(Depth_stencil_format);
     Stencil_format to_stencil_format(Depth_stencil_format);
+
+    bool is_combined_format(Depth_stencil_format);
 
     enum class Sample_count : std::uint8_t {
         S1,

@@ -211,7 +211,7 @@ namespace ags::are::vk10 {
 
         ///
         /// \param framebuffer Framebuffer to which shader will render to, or
-        /// framebuffer similar thereto
+        /// framebuffer with compatible formats
         /// \param vs Vertex shader
         /// \param fs Fragment shader
         void compose(const Framebuffer& framebuffer, const Vertex_shader& vs, const Fragment_shader& fs);
@@ -225,13 +225,9 @@ namespace ags::are::vk10 {
 
         operator bool() const;
 
+        operator vk::Pipeline() const;
+
     private:
-
-        //=================================================
-        // Static members
-        //=================================================
-
-        static int x;
 
         //=================================================
         // Instance members

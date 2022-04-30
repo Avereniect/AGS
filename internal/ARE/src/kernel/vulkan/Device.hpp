@@ -24,6 +24,13 @@ namespace ags::are::vk10 {
 
     Queue_type classify_queue(vk::QueueFamilyProperties p);
 
+    enum class Vendor {
+        NULL_VENDOR,
+        INTEL,
+        NVIDIA,
+        AMD
+    };
+
 
 
 

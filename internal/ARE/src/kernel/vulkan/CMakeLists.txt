@@ -36,4 +36,9 @@ target_link_libraries(AGS_ARE_VK
     PRIVATE vulkan shaderc spirv-reflect-static
 )
 
+set_target_properties(AGS_ARE_VK
+    PROPERTIES
+    CXX_VISIBILITY_PRESET hidden
+)
+
 set_target_properties(AGS_ARE_VK PROPERTIES LINKER_LANGUAGE CXX)

@@ -13,7 +13,7 @@ namespace ags::are {
         return Depth_stencil_format{s};
     }
 
-    Depth_stencil_format to_depth_stencil_format(Depth_stencil_format d, Stencil_format s) {
+    Depth_stencil_format to_depth_stencil_format(Depth_format d, Stencil_format s) {
         return Depth_stencil_format{std::uint8_t(std::uint8_t(d) | std::uint8_t(s))};
     }
 
@@ -23,6 +23,12 @@ namespace ags::are {
 
     Stencil_format to_stencil_format(Depth_stencil_format ds) {
         return Stencil_format{std::uint8_t(std::uint8_t(ds) & 0x01)};
+    }
+
+    bool is_combined_format(Depth_stencil_format f) {
+        return
+            (f == Depth_stencil_format::INT24_STENCIL8) ||
+            (f == Depth_stencil_format::FLOAT32_STENCIL8);
     }
 
 }

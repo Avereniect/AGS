@@ -12,12 +12,24 @@
 
 namespace ags::are::vk10 {
 
-    enum class Heap_type :std::uint8_t {
+    enum class Heap_type : std::uint8_t {
         NULL_HEAP_TYPE,
         DEVICE_MEMORY, //Dedicated GPU's VRAM
         HOST_MEMORY, //System RAM
         SHARED_MEMORY, //Integrated GPU's RAM/system RAM
         TRANSFER_MEMORY //Dedicated GPU's RAM specialized for memory transfers
+    };
+
+    ///
+    /// Enum representing the access patterns for the buffer
+    ///
+    /// STATIC denotes a buffer whose contents are not updated frequently.
+    /// DYNAMIC denotes a buffer whose contents are updated very frequently.
+    ///
+    enum class Buffer_usage : std::uint8_t {
+        NULL_USAGE,
+        STATIC,
+        DYNAMIC
     };
 
     struct Heap {
@@ -42,20 +54,32 @@ namespace ags::are::vk10 {
         ///
         void term();
 
-        ///
-        ///
-        ///
-        void transfer_memory();
+        //=================================================
+        // Buffer Allocation methods
+        //=================================================
 
         ///
-        /// \param n
+        /// \param size Buffer size
+        /// \param usage Enum describing buffer usage
+        /// \return newly created vk::Buffer
+        static vk::Buffer create_vertex_buffer(std::uint32_t size, Buffer_usage usage = {});
+
+        ///
+        /// \param size Buffer size
+        /// \param usage Enum describing buffer usage
+        static void load_vertex_buffer(vk::Buffer buffer, std::uint32_t*, std::uint32_t size);
+
+        ///
+        /// \param size Buffer size
+        /// \param usage Enum describing buffer usage
         /// \return
-        void* map(std::uint64_t n);
+        static vk::Buffer create_index_buffer(std::uint32_t size, Buffer_usage usage = {});
 
         ///
-        ///
-        /// \param ptr
-        void unmap(void* ptr);
+        /// \param size Buffer size
+        /// \param usage Enum describing buffer usage
+        /// \return
+        static vk::Buffer create_image_buffer(std::uint32_t size, Buffer_usage usage = {});
 
     protected:
 
@@ -63,13 +87,32 @@ namespace ags::are::vk10 {
         // Static state
         //=================================================
 
+        ///
+        /// List of memory heaps available to the graphics device
+        ///
         static std::vector<Heap> heaps;
+
+        ///
+        /// List of heaps in order of suitability for static allocations
+        ///
+        static std::vector<std::reference_wrapper<Heap>> static_heaps;
+
+        ///
+        /// List of heaps in order of suitability for dynamic allocations
+        ///
+        static std::vector<std::reference_wrapper<Heap>> dynamic_heaps;
 
         //=================================================
         // Helper functions
         //=================================================
 
         static void retrieve_heaps();
+
+        ///
+        /// Allocates a Vulkan buffer
+        ///
+        /// \return
+        static vk::Buffer create_buffer_exclusive(std::uint32_t);
 
     };
 

@@ -9,4 +9,12 @@ namespace ags::are::vk10 {
 
     }
 
+    //=====================================================
+    // Accessors
+    //=====================================================
+
+    std::uint32_t Mesh::vertex_count() const {
+        return vert_count;
+    }
+
 }

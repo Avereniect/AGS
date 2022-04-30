@@ -23,7 +23,7 @@ namespace ags::are::vk10 {
         // -ctors
         //=================================================
 
-        Render_queue();
+        Render_queue() = default;
         Render_queue(const Render_queue&) = delete;
         Render_queue(Render_queue&&) noexcept;
         ~Render_queue();
@@ -39,9 +39,15 @@ namespace ags::are::vk10 {
         // Mutators
         //=================================================
 
-        void draw(
+        ///
+        /// TODO: Add parameter that contains uniforms/alternatives
+        ///
+        /// \param mesh
+        /// \param shader
+        /// \param framebuffer
+        void enqueue(
             const Mesh& mesh,
-            const Shader& shader,
+            const Shader_program& shader,
             const Framebuffer& framebuffer
         );
 

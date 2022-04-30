@@ -35,6 +35,12 @@ namespace ags::are::vk10 {
 
         void load(const ags::mesh::Fixed_vertex_array_view& mesh);
 
+        //=================================================
+        // Accessors
+        //=================================================
+
+        std::uint32_t vertex_count() const;
+
     private:
 
         //=================================================
@@ -44,6 +50,8 @@ namespace ags::are::vk10 {
         vk::Buffer index_buffer;
         vk::Buffer pos_buffer;
         vk::Buffer norm_buffer;
+
+        std::uint32_t vert_count;
 
     };
 

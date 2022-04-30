@@ -5,6 +5,10 @@
 #ifndef AGS_GL43_DRAW_CALL_HPP
 #define AGS_GL43_DRAW_CALL_HPP
 
+#include "Includes.hpp"
+
+#include <cstdint>
+
 namespace ags::are::gl43 {
 
     struct Draw_call {

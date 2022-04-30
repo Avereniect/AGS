@@ -5,23 +5,23 @@
 #ifndef AGS_ARE_VK10_FRAMEBUFFER_HPP
 #define AGS_ARE_VK10_FRAMEBUFFER_HPP
 
-#include "Render_pass.hpp"
-
 #include "Includes.hpp"
-
-#include <aul/containers/Array_map.hpp>
+#include "Render_pass.hpp"
+#include "../Framebuffer.hpp"
 
 #include <cstdint>
 
+#include <aul/containers/Array_map.hpp>
+
+
 namespace ags::are::vk10 {
 
-    struct Color_attachment {
-        Sample_count sample_count = Sample_count::S1;
-        Channel_format format = Channel_format::NULL_CHANNEL_FORMAT;
-    };
+    class Shader_program;
 
     class Framebuffer {
     public:
+
+        friend class Shader_program;
 
         //=================================================
         // -ctors
@@ -59,22 +59,37 @@ namespace ags::are::vk10 {
         /// Specify the attachments which this framebuffer should have. Any
         /// attachments which the framebuffer may already have are discarded
         ///
-        void specify_attachments(std::initializer_list<Color_attachment> color_attachments);
+        void specify_attachments(
+            std::initializer_list<Color_attachment> color_attachments
+        );
 
         ///
         ///
-        void specify_attachments(std::initializer_list<Color_attachment>, Depth_format);
+        void specify_attachments(
+            std::initializer_list<Color_attachment>,
+            Depth_format
+        );
 
-        void specify_attachments(std::initializer_list<Color_attachment>, Stencil_format);
+        void specify_attachments(
+            std::initializer_list<Color_attachment>,
+            Stencil_format
+        );
 
-        void specify_attachments(std::initializer_list<Color_attachment>, Depth_format, Stencil_format);
+        void specify_attachments(
+            std::initializer_list<Color_attachment>,
+            Depth_format,
+            Stencil_format
+        );
 
         ///
         /// Specify the attachments which this framebuffer should have. Any
         /// attachments which the framebuffer may already have are discarded and
         /// replaced.
         ///
-        void specify_attachments(std::initializer_list<Color_attachment>, Depth_stencil_format);
+        void specify_attachments(
+            std::initializer_list<Color_attachment>,
+            Depth_stencil_format depth_stencil_format
+        );
 
         ///
         /// Releases the currently held resources
@@ -106,7 +121,7 @@ namespace ags::are::vk10 {
 
         std::vector<vk::ImageView> attachment_views;
 
-        std::vector<vk::AttachmentDescription> attachments;
+        std::vector<vk::AttachmentDescription> attachment_descs;
         std::vector<vk::SubpassDescription> descriptors;
         std::vector<vk::SubpassDependency> dependencies;
         std::vector<vk::AttachmentReference> attachment_refs;

@@ -2,17 +2,17 @@
 // Created by avereniect on 12/22/21.
 //
 
-#ifndef AGS_SCENE_HPP
-#define AGS_SCENE_HPP
+#ifndef AGS_ARE_SCENE_HPP
+#define AGS_ARE_SCENE_HPP
 
-#include "Common.hpp"
-#include "Camera.hpp"
+#include "../Common.hpp"
+#include "../Camera.hpp"
 
 namespace ags::apt {
 
     struct Object {
-        whole mesh_index;
-        whole material_index;
+        int32 mesh_index;
+        int32 material_index;
     };
 
     struct Material {
@@ -20,16 +20,16 @@ namespace ags::apt {
     };
 
     struct Mesh {
-        whole indices;
-        whole coordinates;
-        whole normals;
-        whole uvs;
+        int32 indices;
+        int32 coordinates;
+        int32 normals;
+        int32 uvs;
     };
 
     struct Scene {
         Camera camera;
 
-        std::vector<whole> indices;
+        std::vector<int32> indices;
 
         std::vector<real> coordinates;
         std::vector<real> normals;
@@ -38,4 +38,4 @@ namespace ags::apt {
 
 }
 
-#endif //AGS_SCENE_HPP
+#endif //AGS_ARE_SCENE_HPP

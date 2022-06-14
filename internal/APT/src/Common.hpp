@@ -2,15 +2,17 @@
 // Created by avereniect on 12/22/21.
 //
 
-#ifndef AGS_COMMON_HPP
-#define AGS_COMMON_HPP
+#ifndef AGS_APT_COMMON_HPP
+#define AGS_APT_COMMON_HPP
 
-#define AVEL_AVX512VL
-#define AVEL_AVX512BW
+//#define AVEL_AVX512VL
+//#define AVEL_AVX512BW
+#define AVEL_SSE2
 #include "avel/Avel.hpp"
 
-#define AVML_AVX512VL
-#define AVML_AVX512BW
+//#define AVML_AVX512VL
+//#define AVML_AVX512BW
+#define AVML_SSE2
 #include "avml/AVML.hpp"
 
 #include <ags/image/Pixel_buffer.hpp>
@@ -21,15 +23,19 @@ namespace ags::apt {
     // Types for scalar processing
     //=====================================================
 
-    using whole = std::int32_t;
+    using uint32 = std::uint32_t;
+    using int32 = std::int32_t;
 
-    using vec2w = avml::Vector2I<whole>;
-    using vec3w = avml::Vector3I<whole>;
-    using vec4w = avml::Vector4I<whole>;
+    using uint64 = std::uint64_t;
+    using int64 = std::int64_t;
 
-    using mat2x2w = avml::Matrix2x2R<whole>;
-    using mat3x3w = avml::Matrix3x3R<whole>;
-    using mat4x4w = avml::Matrix4x4R<whole>;
+    using vec2i = avml::Vector2I<int32>;
+    using vec3i = avml::Vector3I<int32>;
+    using vec4i = avml::Vector4I<int32>;
+
+    using mat2x2i = avml::Matrix2x2R<int32>;
+    using mat3x3i = avml::Matrix3x3R<int32>;
+    using mat4x4i = avml::Matrix4x4R<int32>;
 
 
     using real = float;
@@ -58,15 +64,15 @@ namespace ags::apt {
     static const int vector_width = avel::optimal_vector_width<float>::value;
 
 
-    using wholev = avel::Vector<whole>;
+    using int32v = avel::Vector<int32>;
 
-    using vec2wv = avml::Vector2I<wholev>;
-    using vec3wv = avml::Vector3I<wholev>;
-    using vec4wv = avml::Vector4I<wholev>;
+    using vec2iv = avml::Vector2I<int32>;
+    using vec3iv = avml::Vector3I<int32>;
+    using vec4iv = avml::Vector4I<int32>;
 
-    using mat2x2wv = avml::Matrix2x2R<wholev>;
-    using mat3x3wv = avml::Matrix3x3R<wholev>;
-    using mat4x4wv = avml::Matrix4x4R<wholev>;
+    using mat2x2iv = avml::Matrix2x2R<int32>;
+    using mat3x3iv = avml::Matrix3x3R<int32>;
+    using mat4x4iv = avml::Matrix4x4R<int32>;
 
 
     using realv = avel::vec32f;
@@ -92,14 +98,9 @@ namespace ags::apt {
     using Image = ags::image::Pixel_buffer<float, 3>;
 
     //=====================================================
-    // Render setting types
+    // Image types
     //=====================================================
-
-    enum class Pixel_filer {
-        BOX,
-        GAUSSIAN
-    };
 
 }
 
-#endif //AGS_COMMON_HPP
+#endif //AGS_APT_COMMON_HPP

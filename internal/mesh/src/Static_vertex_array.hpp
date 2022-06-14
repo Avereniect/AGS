@@ -14,10 +14,27 @@
 
 namespace ags::mesh {
 
-    struct Attribute {
+    enum class Attribute_components : std::uint8_t {
+        ZERO,
+        ONE,
+        TWO,
+        THREE,
+        FOUR
+    };
+
+    ///
+    /// Struct containing information about mesh attributes
+    ///
+    struct Dynamic_attribute {
         Primitive type = Primitive::NULL_PRIMITIVE;
-        std::uint8_t components = 0;
+        Attribute_components components = Attribute_components::ZERO;
         void* ptr = nullptr;
+    };
+
+    template<Primitive p, const char* n>
+    struct Static_attribute {
+        using type = typename ags::primitive_to_type_t<p>;
+        static inline const char* name = n;
     };
 
     class Fixed_vertex_array_base {
@@ -33,6 +50,9 @@ namespace ags::mesh {
         float* uv0 = nullptr;
     };
 
+    ///
+    /// Owning
+    ///
     class Fixed_vertex_array : Fixed_vertex_array_base {
     public:
 
@@ -121,7 +141,7 @@ namespace ags::mesh {
     };
 
     ///
-    /// Class representing
+    /// Class representing a mesh with a dynamic set of vertex attributes.
     ///
     class Dynamic_vertex_array : public Dynamic_vertex_array_base {
     public:
@@ -143,6 +163,10 @@ namespace ags::mesh {
 
         Dynamic_vertex_array& operator=(const Dynamic_vertex_array&) = delete;
         Dynamic_vertex_array& operator=(Dynamic_vertex_array&&) = delete;
+
+        //=================================================
+        // Attribute mutators
+        //=================================================
 
         //=================================================
         // Mutators

@@ -2,8 +2,8 @@
 // Created by avereniect on 12/22/21.
 //
 
-#ifndef AGS_CAMERA_HPP
-#define AGS_CAMERA_HPP
+#ifndef AGS_ARE_CAMERA_HPP
+#define AGS_ARE_CAMERA_HPP
 
 #include "Common.hpp"
 
@@ -12,11 +12,38 @@
 namespace ags::apt {
 
     struct Camera {
-        mat4x4r transform{1.0f};
 
-        vec3r foci{0.0f, 0.0f, 1.0f};
+        ///
+        /// Camera origin
+        ///
+        vec3r location{0.0, 0.0, 0.0};
+
+        ///
+        /// Camera up vector
+        ///
+        uvec3r up{0.0, 0.0, 1.0};
+
+        ///
+        /// Camera forward vector. Should be orthogonal to up vector
+        ///
+        uvec3r forward{0.0, 0.0, -1.0};
+
+        ///
+        /// Width of camera sensor's larger dimension
+        ///
+        real sensor_size = 2.0;
+
+        ///
+        /// X, Y offset
+        ///
+        vec2r offset{0.0, 0.0};
+
+        ///
+        /// Camera focal length
+        ///
+        real focal_length = 1.0;
     };
 
 }
 
-#endif //AGS_CAMERA_HPP
+#endif //AGS_ARE_CAMERA_HPP

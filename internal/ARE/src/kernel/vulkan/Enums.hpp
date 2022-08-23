@@ -2,15 +2,16 @@
 // Created by avereniect on 3/12/22.
 //
 
-#ifndef AGS_ARE_VK10_ENUM_HPP
-#define AGS_ARE_VK10_ENUM_HPP
+#ifndef AGS_ARE_VK_ENUM_HPP
+#define AGS_ARE_VK_ENUM_HPP
 
-#include "Includes.hpp"
-#include "../Enums.hpp"
+#include <ags/Graphics_includes.hpp>
+
+#include "../Enums_common.hpp"
 
 #include <ags/Types.hpp>
 
-namespace ags::are::vk10 {
+namespace ags::are::vk_kernel {
 
     vk::SampleCountFlagBits to_native_enum(Sample_count s);
 
@@ -24,4 +25,4 @@ namespace ags::are::vk10 {
 
 }
 
-#endif //AGS_ARE_VK10_ENUM_HPP
+#endif //AGS_ARE_VK_ENUM_HPP

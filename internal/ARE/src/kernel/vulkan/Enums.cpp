@@ -3,7 +3,7 @@
 //
 #include "Enum.hpp"
 
-namespace ags::are::vk10 {
+namespace ags::are::vk_kernel {
 
     vk::SampleCountFlagBits to_native_enum(Sample_count s) {
         switch (s) {

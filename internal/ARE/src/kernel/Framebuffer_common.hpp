@@ -5,7 +5,7 @@
 #ifndef AGS_ARE_FRAMEBUFFER_HPP
 #define AGS_ARE_FRAMEBUFFER_HPP
 
-#include "Enums.hpp"
+#include "Enums_common.hpp"
 
 #include <ags/Types.hpp>
 

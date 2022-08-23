@@ -5,6 +5,7 @@
 #ifndef AGS_MESH_HPP
 #define AGS_MESH_HPP
 
-#include "../../src/Vertex_array.hpp"
+#include "../../src/Dynamic_vertex_array.hpp"
+#include "ags/mesh/Vertex_array.hpp"
 
 #endif //AGS_MESH_HPP

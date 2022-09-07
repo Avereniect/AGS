@@ -8,14 +8,27 @@ add_executable(AGS
 )
 
 
+
+# This target is used to create a symbolic link from the location of the
+# generated executable to the assets folder so that the
 add_custom_target(LINK_ASSETS
-    COMMAND cmake -E create_symlink "${PROJECT_SOURCE_DIR}/assets" "${CMAKE_BINARY_DIR}/assets"
+    COMMAND cmake -E create_symlink "${PROJECT_SOURCE_DIR}/assets" "${CMAKE_CURRENT_BINARY_DIR}/assets"
 )
 
-
-target_compile_features(AGS PRIVATE cxx_std_17)
-
-target_link_libraries(AGS PUBLIC AGS_core AGS_ARE AGS_ui AUL AVML AVEL)
-
-target_compile_options(AGS PRIVATE "-march=native")
 add_dependencies(AGS LINK_ASSETS)
+
+
+
+target_compile_features(AGS PUBLIC cxx_std_17)
+
+target_link_libraries(AGS
+    PUBLIC APT AGS_core AGS_ARE AGS_ui AUL AVML AVEL AGS_threading AGS_image STB
+)
+
+target_compile_options(AGS PRIVATE "-march=native") # "-fsanitize=address")
+target_link_options(AGS PRIVATE ) #"-fsanitize=address")
+
+if (ipo_supported AND ${CMAKE_BUILD_TYPE} STREQUAL "Release")
+    set_target_properties(AGS PROPERTIES INTERPROCEDURAL_OPTIMIZATION TRUE)
+    target_compile_options(AGS PRIVATE "-flto=auto")
+endif()

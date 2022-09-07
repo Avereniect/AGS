@@ -10,12 +10,17 @@
 
 #include <cstdint>
 
+#include "ags/mesh/Attribute.hpp"
+
 namespace ags::are {
 
     //=====================================================
     // Vertex Attribute Enums
     //=====================================================
 
+    ///
+    /// Enum used to represent how many components a vertex attribute has
+    ///
     enum class Attribute_width : std::uint8_t {
         ZERO = 0,
         ONE = 1,
@@ -24,21 +29,24 @@ namespace ags::are {
         FOUR = 4
     };
 
+    ///
+    /// Enum class representing
+    ///
     enum class Attribute_type : std::uint8_t {
         NULL_ATTRIBUTE_TYPE,
 
-        FLOAT16x1, FLOAT16x2, FLOAT16x3, FLOAT16x4,
         FLOAT32x1, FLOAT32x2, FLOAT32x3, FLOAT32x4,
-        FLOAT64x1, FLOAT64x2, FLOAT64x3, FLOAT64x4,
 
-        UINT8x1,  UINT8x2,  UINT8x3,  UINT8x4,
-        UINT16x1, UINT16x2, UINT16x3, UINT16x4,
         UINT32x1, UINT32x2, UINT32x3, UINT32x4,
 
-        INT8x1,  INT8x2,  INT8x3,  INT8x4,
-        INT16x1, INT16x2, INT16x3, INT16x4,
         INT32x1, INT32x2, INT32x3, INT32x4,
     };
+
+    Attribute_type to_attribute_type(Primitive p, are::Attribute_width w);
+
+    Attribute_type to_attribute_type(Primitive p, mesh::Attribute_width w);
+
+    std::size_t size_of_attribute_type(Attribute_type type);
 
     std::uint32_t attribute_width(Attribute_type type);
 
@@ -61,7 +69,7 @@ namespace ags::are {
         MAT3x2F, MAT3x3F, MAT3x4F,
         MAT4x2F, MAT4x3F, MAT4x4F,
 
-        ARR_TEXTURE1D, ARR_TEXTURE2D, ARR_TEXTURE3D,
+        ARR_TEXTURE1D, ARR_TEXTURE2D,
 
         ARR_VEC1F, ARR_VEC2F, ARR_VEC3F, ARR_VEC4F,
         ARR_VEC1U, ARR_VEC2U, ARR_VEC3U, ARR_VEC4U,
@@ -71,6 +79,10 @@ namespace ags::are {
         ARR_MAT3x2F, ARR_MAT3x3F, ARR_MAT3x4F,
         ARR_MAT4x2F, ARR_MAT4x3F, ARR_MAT4x4F
     };
+
+    //=====================================================
+    // Skybox enums
+    //=====================================================
 
     enum class Cube_sides : std::uint8_t {
         NULL_CUBE_SIDE,
@@ -82,13 +94,78 @@ namespace ags::are {
         WEST
     };
 
+    //=====================================================
+    // Texture enums
+    //=====================================================
+
+    ///
+    ///
+    ///
     enum class Channel_format : std::uint8_t {
-        NULL_CHANNEL_FORMAT,
-        X,
-        XY,
-        XYZ,
-        XYZW
+        NULL_CHANNEL_FORMAT = 0, //No specified channel format
+
+        ///
+        /// One-component channels containing arbitrary data
+        ///
+        X = 1,
+
+        ///
+        /// Two-component channels containing arbitrary data
+        ///
+        XY = 2,
+
+        ///
+        /// Three-component channels containing arbitrary data
+        ///
+        XYZ = 3,
+
+        ///
+        /// Four-component channels containing arbitrary data
+        ///
+        XYZW = 4,
+
+
+        ///
+        /// Two-component channels containing sRGB encoded value channel and linear
+        /// alpha component
+        ///
+        sV = 5,
+
+        ///
+        /// Two-component channels containing sRGB encoded value channel and linear
+        /// alpha component
+        ///
+        sVA = 6,
+
+        ///
+        /// Three-component channels containing sRGB encoded RGB color
+        ///
+        sRGB = 7,
+
+        ///
+        /// Four-component channels containing sRGB encoded RGB color and a linear alpha component
+        ///
+        sRGBA = 8
     };
+
+    enum class Texture_format : std::uint8_t {
+        NULL_TEXTURE_FORMAT,
+        X8U, XY8U, XYZ8U, XYZW8U,
+        X16U, XY16U, XYZ16U, XYZW16U,
+        X32U, XY32U, XYZ32U, XYZW32U,
+        X16F, XY16F, XYZ16F, XYZW16F,
+        X32F, XY32F, XYZ32F, XYZW32F
+    };
+
+    Texture_format to_texture_format(Channel_format c, Primitive t);
+
+    Channel_format to_channel_format(Texture_format);
+
+    Primitive to_primitive(Texture_format);
+
+    //=====================================================
+    // Framebuffer attachment enums
+    //=====================================================
 
     enum class Depth_format : std::uint8_t {
         NULL_DEPTH_FORMAT = 0x00,
@@ -112,12 +189,6 @@ namespace ags::are {
         FLOAT32_STENCIL8 = 0x05
     };
 
-    enum class Queue_usage : std::uint8_t {
-        NULL_QUEUE_USAGE,
-        SINGLE,
-        MULTIPLE
-    };
-
     Depth_stencil_format to_depth_stencil_format(Depth_format);
     Depth_stencil_format to_depth_stencil_format(Stencil_format);
     Depth_stencil_format to_depth_stencil_format(Depth_format, Stencil_format);
@@ -125,15 +196,73 @@ namespace ags::are {
     Depth_format to_depth_format(Depth_stencil_format);
     Stencil_format to_stencil_format(Depth_stencil_format);
 
-    bool is_combined_format(Depth_stencil_format);
+    ///
+    /// \param f A combined depth-stencil buffer format enum
+    /// \return True if the enum value has both a depth and stencil component.
+    /// False otherwise
+    bool is_combined_format(Depth_stencil_format f);
 
+
+
+
+
+    ///
+    /// Enum which is used to indicate how many samples should be used for
+    /// multisampling while rendering
+    ///
     enum class Sample_count : std::uint8_t {
-        S1,
-        S2,
-        S4,
-        S8,
-        S16,
-        S32
+        S1 = 1,
+        S2 = 2,
+        S4 = 4,
+        S8 = 8,
+        S16 = 16,
+        S32 = 32
+    };
+
+    //=====================================================
+    // Sampler enums
+    //=====================================================
+
+    ///
+    ///
+    ///
+    enum class Texture_wrap : std::uint8_t {
+        NULL_WRAP = 0,
+        REPEAT = 1,
+        MIRRORED_REPEAT = 2,
+        CLAMP = 3
+    };
+
+    ///
+    /// Enums used for representing texture filtering methods
+    ///
+    enum class Texture_filter : std::uint8_t {
+        NULL_FILTER = 0,
+        NEAREST = 1,
+        LINEAR = 2
+    };
+
+    ///
+    /// Enums used for representing mipmap filtering methods
+    ///
+    enum class Mipmap_filter : std::uint8_t {
+        NULL_MIPMAP_FILTER = 0,
+        NEAREST = 1,
+        LINEAR = 2
+    };
+
+    //=====================================================
+    // Queue enums
+    //=====================================================
+
+    ///
+    /// Enum which is used to indicate whether a queue will be submitted
+    /// multiple times
+    ///
+    enum class Queue_usage : std::uint8_t {
+        NULL_QUEUE_USAGE,
+        SINGLE,
+        MULTIPLE
     };
 
 }

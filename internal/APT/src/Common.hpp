@@ -5,13 +5,18 @@
 #ifndef AGS_APT_COMMON_HPP
 #define AGS_APT_COMMON_HPP
 
-//#define AVEL_AVX512VL
-//#define AVEL_AVX512BW
+#define AVEL_AVX512VL
+#define AVEL_AVX512BW
+#define AVEL_AVX512F
+#define AVEL_AVX
 #define AVEL_SSE2
 #include "avel/Avel.hpp"
 
-//#define AVML_AVX512VL
-//#define AVML_AVX512BW
+#define AVML_AVX512VL
+#define AVML_AVX512BW
+#define AVML_AVX512F
+#define AVML_FMA
+#define AVML_AVX
 #define AVML_SSE2
 #include "avml/AVML.hpp"
 
@@ -98,8 +103,10 @@ namespace ags::apt {
     using Image = ags::image::Pixel_buffer<float, 3>;
 
     //=====================================================
-    // Image types
+    // Function types
     //=====================================================
+
+    using window_func_type = real (*)(real, real);
 
 }
 

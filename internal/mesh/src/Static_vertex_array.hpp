@@ -7,34 +7,56 @@
 
 #include "ags/Types.hpp"
 
-#include <aul/containers/Array_map.hpp>
-
 #include <cstdint>
 #include <string>
+#include <tuple>
 
 namespace ags::mesh {
-
-    enum class Attribute_components : std::uint8_t {
-        ZERO,
-        ONE,
-        TWO,
-        THREE,
-        FOUR
-    };
-
-    ///
-    /// Struct containing information about mesh attributes
-    ///
-    struct Dynamic_attribute {
-        Primitive type = Primitive::NULL_PRIMITIVE;
-        Attribute_components components = Attribute_components::ZERO;
-        void* ptr = nullptr;
-    };
 
     template<Primitive p, const char* n>
     struct Static_attribute {
         using type = typename ags::primitive_to_type_t<p>;
         static inline const char* name = n;
+    };
+
+    ///
+    /// \tparam Attributes List of ags::mesh::Static_attribute classes
+    template<class...Attributes>
+    class Static_vertex_array {
+    public:
+
+        //=================================================
+        // -ctors
+        //=================================================
+
+        Static_vertex_array() = default;
+
+        //=================================================
+        // Assignment operators
+        //=================================================
+
+        //=================================================
+        // Mutators
+        //=================================================
+
+        void load(const std::uint32_t* index_ptr, const typename Attributes::type*... attributes) {
+            //TODO: Allocate indices
+
+
+        }
+
+    private:
+
+        //=================================================
+        // Instance members
+        //=================================================
+
+        std::uint32_t num_indices = 0;
+        std::uint32_t* indices = nullptr;
+
+        std::uint32_t num_vertices = 0;
+
+
     };
 
     class Fixed_vertex_array_base {
@@ -114,96 +136,6 @@ namespace ags::mesh {
     };
 
 
-    class Dynamic_vertex_array_base {
-    public:
-
-        Dynamic_vertex_array_base() = default;
-        ~Dynamic_vertex_array_base() = default;
-
-        //=================================================
-        // Mutators
-        //=================================================
-
-        void add_attribute(const void*);
-
-    protected:
-
-        //=================================================
-        // Instance members
-        //=================================================
-
-        std::uint32_t* indices;
-        std::uint32_t index_count;
-
-        std::uint32_t vertex_count;
-        aul::Array_map<std::string, Attribute> attributes{};
-
-    };
-
-    ///
-    /// Class representing a mesh with a dynamic set of vertex attributes.
-    ///
-    class Dynamic_vertex_array : public Dynamic_vertex_array_base {
-    public:
-
-        //=================================================
-        // -ctors
-        //=================================================
-
-        Dynamic_vertex_array() = default;
-        Dynamic_vertex_array(const Dynamic_vertex_array&) = delete;
-        Dynamic_vertex_array(Dynamic_vertex_array&&) = delete;
-        ~Dynamic_vertex_array() {
-            clear();
-        }
-
-        //=================================================
-        // Assignment operators
-        //=================================================
-
-        Dynamic_vertex_array& operator=(const Dynamic_vertex_array&) = delete;
-        Dynamic_vertex_array& operator=(Dynamic_vertex_array&&) = delete;
-
-        //=================================================
-        // Attribute mutators
-        //=================================================
-
-        //=================================================
-        // Mutators
-        //=================================================
-
-        void clear() {
-            free(indices);
-            indices = nullptr;
-            index_count = 0;
-            vertex_count = 0;
-
-            attributes.clear();
-        }
-
-    private:
-
-        //=================================================
-        // Instance members
-        //=================================================
-
-        std::uint32_t* indices = nullptr;
-        std::uint32_t index_count = 0;
-
-        std::uint32_t vertex_count = 0;
-        aul::Array_map<std::string, Attribute> attributes{};
-    };
-
-    class Dynamic_vertex_array_view {
-    public:
-
-        Dynamic_vertex_array_view() = default;
-        ~Dynamic_vertex_array_view() = default;
-
-    private:
-
-
-    };
 
 }
 

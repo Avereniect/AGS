@@ -6,11 +6,11 @@
 #include "Kernel.hpp"
 
 #include <shaderc/shaderc.hpp>
-#include <spirv-reflect/spirv_reflect.h>
+#include <spirv_reflect.h>
 
 #include <stdexcept>
 
-namespace ags::are::vk10 {
+namespace ags::are::vk_kernel {
 
     //=========================================================================
     // Vertex Shader Object

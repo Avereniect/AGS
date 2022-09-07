@@ -2,13 +2,14 @@
 // Created by avereniect on 3/15/22.
 //
 
-#ifndef AGS_ARE_VK10_MESH_KERNEL_HPP
-#define AGS_ARE_VK10_MESH_KERNEL_HPP
+#ifndef AGS_ARE_VK_MESH_KERNEL_HPP
+#define AGS_ARE_VK_MESH_KERNEL_HPP
 
-#include "Includes.hpp"
+#include <ags/Graphics_includes.hpp>
+
 #include "Device_kernel.hpp"
 
-namespace ags::are::vk10 {
+namespace ags::are::vk_kernel {
 
     class Mesh_kernel : public Device_kernel {
     public:
@@ -33,4 +34,4 @@ namespace ags::are::vk10 {
 
 }
 
-#endif //AGS_ARE_VK10_MESH_KERNEL_HPP
+#endif //AGS_ARE_VK_MESH_KERNEL_HPP

@@ -4,24 +4,32 @@
 
 #include "ARE.hpp"
 
-#ifdef AGS_OPENGL43
+#ifdef AGS_OPENGL
 #include "kernel/opengl/Kernel.hpp"
+#endif
+
+#ifdef AGS_VULKAN
+#include "kernel/vulkan/Kernel.hpp"
 #endif
 
 namespace ags::are {
 
+    //=====================================================
+    // Static members
+    //=====================================================
+
     bool ARE::is_initialized = false;
+
+    //=====================================================
+    // State functions
+    //=====================================================
 
     bool ARE::init() {
         if (is_initialized) {
             return false;
         }
 
-        #if defined(AGS_VULKAN10)
-        vk10::Kernel::init();
-        #elif defined(AGS_OPENGL43)
-        gl43::Kernel::init();
-        #endif
+        Kernel::init();
 
         is_initialized = true;
         return true;
@@ -32,13 +40,22 @@ namespace ags::are {
             return;
         }
 
-        #if defined(AGS_VULKAN10)
-        vk10::Kernel::term();
-        #elif defined(AGS_OPENGL43)
-        gl43::Kernel::term();
-        #endif
+        Kernel::term();
 
         is_initialized = false;
+    }
+
+    //=====================================================
+    // Misc. Functions
+    //=====================================================
+
+    void draw(
+        Render_queue& queue,
+        Framebuffer& framebuffer
+    ) {
+        auto attachment_count = framebuffer.color_attachments().size();
+        Kernel::attachment_mask_type attachment_mask = (1 << attachment_count) - 1;
+        Kernel::submit_render_queue(queue, framebuffer.native_handle(), attachment_mask, framebuffer.dimensions());
     }
 
 }

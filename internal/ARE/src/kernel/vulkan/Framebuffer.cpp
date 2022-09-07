@@ -4,9 +4,9 @@
 #include "Framebuffer.hpp"
 #include "Device_kernel.hpp"
 
-#include "Enum.hpp"
+#include "Enums.hpp"
 
-namespace ags::are::vk10 {
+namespace ags::are::vk_kernel {
 
     //=====================================================
     // -ctors
@@ -302,6 +302,10 @@ namespace ags::are::vk10 {
 
     std::array<std::uint32_t, 2> Framebuffer::dimensions() const {
         return dims;
+    }
+
+    Framebuffer::operator bool() const {
+        return handle;
     }
 
 }

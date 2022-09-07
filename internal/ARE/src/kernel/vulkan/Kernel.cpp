@@ -5,10 +5,7 @@
 #include "Kernel.hpp"
 #include "Device_kernel.hpp"
 
-#include <vulkan/vulkan.h>
-#include <GLFW/glfw3.h>
-
-namespace ags::are::vk10 {
+namespace ags::are::vk_kernel {
 
     //=====================================================
     // State methods

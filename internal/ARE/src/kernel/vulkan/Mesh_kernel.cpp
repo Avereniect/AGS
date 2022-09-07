@@ -5,7 +5,7 @@
 
 #include "Device_kernel.hpp"
 
-namespace ags::are::vk10 {
+namespace ags::are::vk_kernel {
 
     void Mesh_kernel::init() {
         auto memory_properties = graphics_device.physical_device.getMemoryProperties();

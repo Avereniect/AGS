@@ -2,64 +2,78 @@
 // Created by avereniect on 1/1/22.
 //
 
-#ifndef AGS_GL43_KERNEL_HPP
-#define AGS_GL43_KERNEL_HPP
+#ifndef AGS_ARE_GL_KERNEL_HPP
+#define AGS_ARE_GL_KERNEL_HPP
 
-#include "Mesh.hpp"
-#include "Shader.hpp"
-#include "Draw_call.hpp"
 #include "Render_queue.hpp"
+#include "Compute_queue.hpp"
+
+#include "Mesh_kernel.hpp"
+#include "Texture_kernel.hpp"
+#include "Shader_kernel.hpp"
+#include "Framebuffer_kernel.hpp"
 
 #include <cstdint>
 #include <queue>
+#include <array>
 
-namespace ags::are::gl43 {
+namespace ags::are::gl_kernel {
+
     ///
-    /// Class wrapping around OpenGL 3.3 state
+    /// Class wrapping around OpenGL rendering context.
     ///
-    class Kernel {
+    /// Public-facing
+    ///
+    class Kernel :
+        public Mesh_kernel,
+        public Texture_kernel,
+        public Shader_kernel,
+        public Framebuffer_kernel {
     public:
 
         //=================================================
         // State methods
         //=================================================
 
-        static bool init();
+        ///
+        ///
+        ///
+        static void init();
 
+        ///
+        ///
+        ///
         static void term();
+
+        //=================================================
+        // State mutators
+        //=================================================
 
         //=================================================
         // Drawing methods
         //=================================================
 
         ///
-        /// Adds a draw call too internal queue.
+        /// Submit the work contains within the specified render queue. Function
+        /// may return before the commands are completed.
         ///
-        /// \param mesh Mesh to draw
-        /// \param shader Shader to draw with
-        static void queue_frame(const Mesh& mesh, const Shader& shader);
+        /// Note: Contents of render queue may be sorted during this submission
+        ///
+        /// \param render_queue Queue containing draw calls
+        static void submit_render_queue(
+            Render_queue& render_queue,
+            GLuint framebuffer_id,
+            attachment_mask_type attachment_mask,
+            std::array<std::uint32_t, 2> dims
+        );
 
         ///
-        /// Issues draw calls contained within queue
         ///
-        static void draw_frame();
-
-        ///
-        /// \param render_queue
-        static void submit_render_queue(const Render_queue& render_queue);
-
-    private:
-
-        static std::priority_queue<Draw_call> render_queue;
-
-        //=================================================
-        // Helper function
-        //=================================================
-
-        static void issue_draw_call(const Draw_call& draw_call);
+        /// \param compute_queue Queue containing compute tasks to execute
+        static void submit_compute_queue(Compute_queue& compute_queue);
 
     };
 
 }
 
-#endif //AGS_GL33_KERNEL_HPP
+#endif //AGS_ARE_GL_KERNEL_HPP

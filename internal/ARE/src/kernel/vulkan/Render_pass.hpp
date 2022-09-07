@@ -2,16 +2,16 @@
 // Created by avereniect on 1/22/22.
 //
 
-#ifndef AGS_ARE_VK10_RENDER_PASS_HPP
-#define AGS_ARE_VK10_RENDER_PASS_HPP
+#ifndef AGS_ARE_VK_RENDER_PASS_HPP
+#define AGS_ARE_VK_RENDER_PASS_HPP
 
-#include "../Enums.hpp"
+#include <ags/Graphics_includes.hpp>
 
-#include <vulkan/vulkan.hpp>
+#include "../Enums_common.hpp"
 
 #include <cstdint>
 
-namespace ags::are::vk10 {
+namespace ags::are::vk_kernel {
 
     class Render_pass {
     public:

@@ -3,9 +3,11 @@
 //
 #include "Kernel_base.hpp"
 
+#include <ags/Logging.hpp>
+
 #include <cstdint>
 
-namespace ags::are::vk10 {
+namespace ags::are::vk_kernel {
 
     //=====================================================
     // Static members
@@ -118,8 +120,8 @@ namespace ags::are::vk10 {
             }
 
             if (!layer_found) {
-                std::string error_message{"Could not find requested validation layer: ", name};
-                throw std::runtime_error(error_message);
+                AGS_FATAL("Fatal error encountered at {}\n{}{}", AGS_CODE_LOCATION, "Could not find requested validation layer: ", name);
+                exit(EXIT_FAILURE);
             }
         }
     }

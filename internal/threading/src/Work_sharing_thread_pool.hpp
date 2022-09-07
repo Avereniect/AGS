@@ -87,8 +87,12 @@ namespace ags::threading {
         std::atomic_bool pause_flag{false};
 
 
+
         ///
-        /// Atomic counter that is used to count how many threads are not idling
+        /// Atomic counter that is used to
+        ///
+        ///
+        ///count how many threads are not idling
         ///
         std::uint32_t active_thread_count = 0;
 
@@ -202,9 +206,29 @@ namespace ags::threading {
             m->free_id += 1;
             task_family_id_type family_id = m->free_id;
 
-            if (wait_id == 0) {
-                //Add to ready_task_queue at sorted position, which would be at
-                //the end
+            {
+                // Task family counts need to be updated before ready queue
+                // since the task could and attempt to update its task family
+                // count before this function returns.
+                std::scoped_lock lk{m->task_family_counts_mutex};
+                m->task_family_counts.emplace(family_id, 1);
+            }
+                //Add to waiting_task_queue at sorted position
+
+                bool waiting_unnecessary = false;
+
+            {
+                if (wait_id == 0) {
+                    waiting_unnecessary = true;
+                } else {
+                    std::unique_lock lk{m->task_family_counts_mutex};
+                    waiting_unnecessary =
+                        !m->task_family_counts.empty() &&
+                        (wait_id < m->task_family_counts.keys()[0]);
+                }
+            }
+
+            if (waiting_unnecessary) {
                 {
                     std::scoped_lock lk{m->ready_task_queue_mutex};
                     m->ready_task_queue.emplace_back(family_id, wait_id, f);
@@ -214,9 +238,7 @@ namespace ags::threading {
                     m->continue_condition_var.notify_one();
                 }
             } else {
-                //Add to waiting_task_queue at sorted position
                 std::scoped_lock lk{m->waiting_task_queue_mutex};
-
                 auto it = aul::binary_search(
                     m->waiting_task_queue.begin(),
                     m->waiting_task_queue.end(),
@@ -225,12 +247,6 @@ namespace ags::threading {
                 );
 
                 m->waiting_task_queue.emplace(it, family_id, wait_id, f);
-            }
-
-            {
-                std::scoped_lock lk{m->task_family_counts_mutex};
-                m->task_family_counts.emplace(family_id, 1);
-
             }
 
             return family_id;

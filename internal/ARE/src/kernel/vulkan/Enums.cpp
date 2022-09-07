@@ -1,7 +1,7 @@
 //
 // Created by avereniect on 3/12/22.
 //
-#include "Enum.hpp"
+#include "Enums.hpp"
 
 namespace ags::are::vk_kernel {
 
@@ -21,9 +21,14 @@ namespace ags::are::vk_kernel {
     vk::Format to_native_enum(Channel_format f, Primitive primitive) {
         switch (primitive) {
             case Primitive::UINT8: {
-                switch (f) {
-                case Channel_format::X: return vk::Format::e;
-                }
+                static constexpr vk::Format table[] {
+                    vk::Format::eR8Uint,
+                    vk::Format::eR8G8Uint,
+                    vk::Format::eB8G8R8A8Uint,
+                    vk::Format::eA8B8G8R8UintPack32
+                };
+
+                return table[static_cast<std::uint32_t>(f) - 1];
             }
             case Primitive::UINT16: {
 
@@ -31,11 +36,9 @@ namespace ags::are::vk_kernel {
             case Primitive::FLOAT32: {
 
             }
-        }
-
-        switch (f) {
-        case Channel_format::X: return vk::Format::e;
-        default: return vk::Format::eUndefined;
+        default:
+            AGS_ERROR("Error encountered at {}\n{}", AGS_CODE_LOCATION, "Unrecognized enum value");
+            return vk::Format::eUndefined;
         }
     }
 
@@ -67,6 +70,29 @@ namespace ags::are::vk_kernel {
         case Depth_stencil_format::FLOAT32_STENCIL8: return vk::Format::eD32SfloatS8Uint;
         default:
             ; //Error;
+        }
+    }
+
+    vk::Format to_native_enum(Texture_format format) {
+        Primitive p = to_primitive_type(format);
+        switch (p) {
+        case Primitive::UINT8: {
+            static constexpr table[] {
+                vk::Format
+            };
+        }
+        case Primitive::UINT16: {
+
+        }
+        case Primitive::UINT32: {
+
+        }
+        case Primitive::FLOAT16: {
+
+        }
+        case Primitive::FLOAT32: {
+
+        }
         }
     }
 

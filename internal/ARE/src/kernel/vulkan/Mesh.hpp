@@ -2,15 +2,15 @@
 // Created by avereniect on 3/12/22.
 //
 
-#ifndef AGS_ARE_VK10_MESH_HPP
-#define AGS_ARE_VK10_MESH_HPP
+#ifndef AGS_ARE_VK_MESH_HPP
+#define AGS_ARE_VK_MESH_HPP
 
-#include "Includes.hpp"
+#include <ags/Graphics_includes.hpp>
 
 #include <ags/Mesh.hpp>
 #include <cstdint>
 
-namespace ags::are::vk10 {
+namespace ags::are::vk_kernel {
 
     class Mesh {
     public:
@@ -19,7 +19,8 @@ namespace ags::are::vk10 {
         // -ctors
         //=================================================
 
-        Mesh();
+        Mesh() = default;
+        Mesh(const Mesh&) = delete;
         Mesh(Mesh&&) noexcept;
         ~Mesh();
 
@@ -27,13 +28,16 @@ namespace ags::are::vk10 {
         // Assignment operators
         //=================================================
 
+        Mesh& operator=(const Mesh&) = delete;
         Mesh& operator=(Mesh&&) noexcept;
 
         //=================================================
         // Buffer mutators
         //=================================================
 
-        void load(const ags::mesh::Fixed_vertex_array_view& mesh);
+        void load(const mesh::Dynamic_vertex_array& mesh);
+
+        void unload();
 
         //=================================================
         // Accessors
@@ -51,10 +55,10 @@ namespace ags::are::vk10 {
         vk::Buffer pos_buffer;
         vk::Buffer norm_buffer;
 
-        std::uint32_t vert_count;
+        std::uint32_t vert_count{};
 
     };
 
 }
 
-#endif //AGS_ARE_VK10_MESH_HPP
+#endif //AGS_ARE_VK_MESH_HPP

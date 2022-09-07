@@ -2,14 +2,16 @@
 // Created by avereniect on 1/24/22.
 //
 
-#ifndef AGS_GL43_DRAW_CALL_HPP
-#define AGS_GL43_DRAW_CALL_HPP
+#ifndef AGS_ARE_GL_DRAW_CALL_HPP
+#define AGS_ARE_GL_DRAW_CALL_HPP
 
-#include "Includes.hpp"
+#include <ags/Graphics_includes.hpp>
+
+#include "Framebuffer_kernel.hpp"
 
 #include <cstdint>
 
-namespace ags::are::gl43 {
+namespace ags::are::gl_kernel {
 
     struct Draw_call {
 
@@ -26,11 +28,7 @@ namespace ags::are::gl43 {
             //TODO: Take into consideration depth. Fiddle with order to
             // determine best place to perform comparison
 
-            if (ebo < rhs.ebo) {
-                return true;
-            }
-
-            if (framebuffer < rhs.framebuffer) {
+            if (vao < rhs.vao) {
                 return true;
             }
 
@@ -45,13 +43,12 @@ namespace ags::are::gl43 {
         // Instance members
         //=================================================
 
-        std::uint32_t num_elements = 0;
-        GLuint ebo = 0;
-
+        std::uint32_t num_indices = 0;
+        GLuint vao = 0;
         GLuint shader = 0;
-        GLuint framebuffer = 0;
+
     };
 
 }
 
-#endif //AGS_GL33_DRAW_CALL_HPP
+#endif //AGS_ARE_GL_DRAW_CALL_HPP

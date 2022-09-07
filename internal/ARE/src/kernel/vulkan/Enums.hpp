@@ -15,13 +15,15 @@ namespace ags::are::vk_kernel {
 
     vk::SampleCountFlagBits to_native_enum(Sample_count s);
 
-    vk::Format to_native_enum(Channel_format, Primitive primitive);
+    vk::Format to_native_enum(Channel_format f, Primitive primitive);
 
     vk::Format to_native_enum(Stencil_format);
 
     vk::Format to_native_enum(Depth_format);
 
     vk::Format to_native_enum(Depth_stencil_format);
+
+    vk::Format to_native_enum(Texture_format format);
 
 }
 

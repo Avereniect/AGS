@@ -22,8 +22,8 @@ namespace ags::mesh {
             auto* orig = attrib.ptr;
 
             auto allocation_size =
-                size_of_primitive(attrib.type) *
-                static_cast<std::uint8_t>(attrib.width) *
+                size_of_primitive(attrib.type()) *
+                static_cast<std::uint8_t>(attrib.width()) *
                 num_vertices;
             attrib.ptr = malloc(allocation_size);
 
@@ -61,8 +61,8 @@ namespace ags::mesh {
             auto* orig = attrib.ptr;
 
             auto allocation_size =
-                size_of_primitive(attrib.type) *
-                static_cast<std::uint8_t>(attrib.width) *
+                size_of_primitive(attrib.type()) *
+                static_cast<std::uint8_t>(attrib.width()) *
                 num_vertices;
             attrib.ptr = malloc(allocation_size);
 

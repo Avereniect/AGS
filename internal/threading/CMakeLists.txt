@@ -22,8 +22,8 @@ if (AGS_THREADING_BUILD_TESTS)
         tests/Work_sharing_thread_pool_tests.hpp
     )
 
-    target_compile_options(AGS_THREADING_TESTS PRIVATE) #"-fsanitize=address")
-    target_link_options(AGS_THREADING_TESTS PRIVATE) #"-fsanitize=address")
+    target_compile_options(AGS_THREADING_TESTS PRIVATE "-fsanitize=address")
+    target_link_options(AGS_THREADING_TESTS PRIVATE "-fsanitize=address")
     target_compile_features(AGS_THREADING_TESTS PRIVATE cxx_std_17)
 
     target_link_libraries(AGS_THREADING_TESTS PUBLIC AGS_threading gtest AUL)

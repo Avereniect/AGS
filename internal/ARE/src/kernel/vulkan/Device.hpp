@@ -2,14 +2,14 @@
 // Created by avereniect on 1/16/22.
 //
 
-#ifndef AGS_ARE_VK10_DEVICE_HPP
-#define AGS_ARE_VK10_DEVICE_HPP
+#ifndef AGS_ARE_VK_DEVICE_HPP
+#define AGS_ARE_VK_DEVICE_HPP
 
-#include <vulkan/vulkan.hpp>
+#include <ags/Graphics_includes.hpp>
 
 #include <vector>
 
-namespace ags::are::vk10 {
+namespace ags::are::vk_kernel {
 
     //=====================================================
     // Enums

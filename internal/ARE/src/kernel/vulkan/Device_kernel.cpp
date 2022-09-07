@@ -4,7 +4,7 @@
 #include "Device_kernel.hpp"
 #include <cstdint>
 
-namespace ags::are::vk10 {
+namespace ags::are::vk_kernel {
 
     //=====================================================
     // Static members

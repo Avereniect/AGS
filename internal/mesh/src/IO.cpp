@@ -51,7 +51,7 @@ namespace ags::mesh {
             return {};
         }
 
-        Vertex_array ret;
+        Vertex_array ret{};
 
         //Read indices
         {

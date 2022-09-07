@@ -4,24 +4,18 @@
 #ifndef AGS_UI_WINDOW_HPP
 #define AGS_UI_WINDOW_HPP
 
-#include <vulkan/vulkan.hpp>
-//#include <glad/glad.h>
-#include <GLFW/glfw3.h>
+#include <ags/Graphics_includes.hpp>
 
 #include <array>
 #include <cstdint>
 #include <string>
 
+#include <ags/ARE.hpp>
+
 namespace ags::ui {
 
     class Window {
     public:
-
-        //=================================================
-        // Helper classes
-        //=================================================
-
-        struct vulkan_data;
 
         //=================================================
         // -ctors
@@ -69,13 +63,37 @@ namespace ags::ui {
         /// \param y Window height to resize to
         void resize(std::uint32_t x, std::uint32_t y);
 
+        ///
+        /// Relocate window to be at specified coordinates at monitor
+        ///
+        /// \param x X coordinate in monitor
+        /// \param y Y coordinate in
         void move(std::uint32_t x, std::uint32_t y);
 
+        ///
+        /// Show the window.
+        ///
         void show();
 
+        ///
+        /// Hide the window.
+        ///
         void hide();
 
-        void refresh();
+        ///
+        /// Display the contents of the of the texture on the window.
+        ///
+        /// If the texture is of a lower resolution than the window, then it
+        /// will be centered with a black border around it.
+        ///
+        /// If the texture is of a higher resolution than the window, then it
+        /// will be centered, with the contents that lie outside the bounds of
+        /// the windows cut off.
+        ///
+        /// \param texture Texture to display on  window
+        void refresh(const ags::are::Texture2D& texture);
+
+        void refresh(const ags::are::Framebuffer& framebuffer, std::uint32_t attachment = 0);
 
         //=================================================
         // Accessors
@@ -131,7 +149,23 @@ namespace ags::ui {
         ///
         std::array<std::uint32_t, 2> frame_dims{0, 0};
 
-        #if defined(AGS_VULKAN10)
+        #if defined(AGS_OPENGL)
+
+        ///
+        /// Dummy VAO
+        ///
+        /// Exists only to satisfy the VAO requirement imposed by the OpenGL
+        /// core profile
+        ///
+        static GLuint display_vao;
+
+        static GLuint display_vertex_shader;
+        static GLuint display_fragment_shader;
+        static GLuint display_shader_program;
+
+        #endif
+
+        #if defined(AGS_VULKAN)
 
         vk::SurfaceKHR surface{};
 
@@ -156,7 +190,11 @@ namespace ags::ui {
         /// \return Pointer to newly created GLFWwindow object
         static GLFWwindow* create_handle(std::uint32_t x, std::uint32_t y, const std::string&);
 
-        void create_swapchain(std::uint32_t x, std::uint32_t y);
+        ///
+        /// Native OpenGL rendering context should be active in current thread
+        /// before calling
+        ///
+        static void setup_display_shader();
 
         //=================================================
         // Callbacks
@@ -168,6 +206,7 @@ namespace ags::ui {
 
         static void mouse_scroll_callback(GLFWwindow* w, double dx, double dy);
 
+        static void window_size_callback(GLFWwindow* w, int width, int height);
 
     };
 

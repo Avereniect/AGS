@@ -2,14 +2,18 @@
 // Created by avereniect on 1/9/22.
 //
 
-#ifndef AGS_GL43_OBJECT_HPP
-#define AGS_GL43_OBJECT_HPP
+#ifndef AGS_ARE_GL_OBJECT_HPP
+#define AGS_ARE_GL_OBJECT_HPP
 
-#include <glad/glad.h>
+#include <ags/Graphics_includes.hpp>
 
-namespace ags::are::gl43 {
+namespace ags::are::gl_kernel {
 
     class Object {
+    protected:
+
+        explicit Object(GLuint);
+
     public:
 
         Object() = default;
@@ -20,9 +24,13 @@ namespace ags::are::gl43 {
         Object& operator=(const Object&) = delete;
         Object& operator=(Object&&) noexcept;
 
+        ///
+        /// \return Native OpenGL handle
         [[nodiscard]]
-        GLuint get_id() const;
+        GLuint native_handle() const;
 
+        ///
+        /// \return True if this object holds a resource. False otherwise
         operator bool() const {
             return (id != 0);
         }
@@ -39,4 +47,4 @@ namespace ags::are::gl43 {
 
 }
 
-#endif //AGS_GL43_OBJECT_HPP
+#endif //AGS_ARE_GL_OBJECT_HPP

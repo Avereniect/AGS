@@ -2,8 +2,10 @@
 // Created by avereniect on 1/22/22.
 //
 
-#ifndef AGS_ARE_VK10_RENDER_QUEUE_HPP
-#define AGS_ARE_VK10_RENDER_QUEUE_HPP
+#ifndef AGS_ARE_VK_RENDER_QUEUE_HPP
+#define AGS_ARE_VK_RENDER_QUEUE_HPP
+
+#include <ags/Graphics_includes.hpp>
 
 #include "Draw_call.hpp"
 #include "Mesh.hpp"
@@ -12,9 +14,7 @@
 
 #include <queue>
 
-#include <vulkan/vulkan.hpp>
-
-namespace ags::are::vk10 {
+namespace ags::are::vk_kernel {
 
     class Render_queue {
     public:
@@ -42,14 +42,27 @@ namespace ags::are::vk10 {
         ///
         /// TODO: Add parameter that contains uniforms/alternatives
         ///
-        /// \param mesh
-        /// \param shader
-        /// \param framebuffer
+        /// Adds drawing command to the render queue
+        ///
+        /// If any of the specified resources are destroyed before the queue is
+        /// submitted then the queue is considered to be invalid and must not be
+        /// submitted until its current contents are cleared submitted. Ideally,
+        /// this should be avoided in the first place.
+        ///
+        /// \param mesh Mesh to draw
+        /// \param shader Shader to draw mesh with
+        /// \param framebuffer Framebuffer to draw to
         void enqueue(
             const Mesh& mesh,
             const Shader_program& shader,
             const Framebuffer& framebuffer
         );
+
+        ///
+        /// Clear all previously recorded commands and restore contents of
+        /// buffer to empty state.
+        ///
+        void clear();
 
     private:
 
@@ -63,4 +76,4 @@ namespace ags::are::vk10 {
 
 }
 
-#endif //AGS_ARE_VK10_RENDER_QUEUE_HPP
+#endif //AGS_ARE_VK_RENDER_QUEUE_HPP

@@ -5,7 +5,10 @@
 
 #include <utility>
 
-namespace ags::are::gl43 {
+namespace ags::are::gl_kernel {
+
+    Object::Object(GLuint id):
+        id(id) {}
 
     Object::Object(Object&& other) noexcept:
         id(std::exchange(other.id, 0)) {}
@@ -15,7 +18,7 @@ namespace ags::are::gl43 {
         return *this;
     }
 
-    GLuint Object::get_id() const {
+    GLuint Object::native_handle() const {
         return id;
     }
 

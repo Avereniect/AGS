@@ -20,8 +20,8 @@ namespace ags::mesh {
             auto* orig = attrib.ptr;
 
             auto allocation_size =
-                size_of_primitive(attrib.type) *
-                static_cast<std::uint8_t>(attrib.width) *
+                size_of_primitive(attrib.type()) *
+                static_cast<std::uint8_t>(attrib.width()) *
                 num_vertices;
             attrib.ptr = malloc(allocation_size);
 
@@ -33,7 +33,7 @@ namespace ags::mesh {
         num_indices(std::exchange(rhs.num_indices, 0)),
         index_array(std::exchange(rhs.index_array, nullptr)),
         num_vertices(std::exchange(rhs.num_vertices, 0)),
-        attribute_map(std::exchange(attribute_map, {})) {}
+        attribute_map(std::exchange(rhs.attribute_map, {})) {}
 
     Vertex_array::~Vertex_array() {
         clear();
@@ -59,8 +59,8 @@ namespace ags::mesh {
             auto* orig = attrib.ptr;
 
             auto allocation_size =
-                size_of_primitive(attrib.type) *
-                static_cast<std::uint8_t>(attrib.width) *
+                size_of_primitive(attrib.type()) *
+                static_cast<std::uint8_t>(attrib.width()) *
                 num_vertices;
             attrib.ptr = malloc(allocation_size);
 

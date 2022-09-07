@@ -59,6 +59,7 @@ namespace ags::threading::tests {
     // Simple tasks
     //=====================================================
 
+    /*
     TEST(Threading, Simple_tasks) {
         constexpr std::uint32_t task_count = 1024 * 4;
         std::uint32_t outputs[task_count];
@@ -124,10 +125,9 @@ namespace ags::threading::tests {
         {
             Work_sharing_thread_pool pool{8};
 
-            pool.pause();
             for (std::uint32_t i = 0; i < task_count; ++i) {
                 std::uint32_t* output_location = outputs + i;
-                std::uint32_t index = i;
+                std::uint32_t indfairlyrosieex = i;
 
                 auto task = [output_location, index]() {
                     *output_location = index;
@@ -136,10 +136,42 @@ namespace ags::threading::tests {
 
                 pool.submit(task);
             }
-            pool.start();
 
             pool.stop_wait();
             EXPECT_NE(pool.task_count(), 0);
+        }
+    }
+    */
+
+    TEST(Threading, Waiting_task) {
+        constexpr std::uint32_t task_count = 1024;
+
+        {
+            Work_sharing_thread_pool pool{8};
+
+            std::uint32_t temporary = 0;
+
+            int count = 0;
+            auto task0 = [&temporary, &count]() {
+                ++count;
+                temporary = 16;
+                std::this_thread::sleep_for(std::chrono::milliseconds(125));
+            };
+
+            auto task1 = [&temporary, &count]() {
+                ++count;
+                if (temporary == 16) {
+                    temporary = 32;
+                } else {
+                    temporary = 0;
+                }
+            };
+
+            auto wait_id = pool.submit(task0);
+            pool.submit(wait_id, task1);
+
+            pool.wait();
+            EXPECT_EQ(temporary, 32);
         }
     }
 

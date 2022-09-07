@@ -9,4 +9,10 @@ target_link_libraries(AGS_ui
     PUBLIC AGS_core AGS_ARE
 )
 
+set(AGS_USE_OPENGL ON)
+
+target_compile_definitions(AGS_ui
+    PRIVATE AGS_MODULE_NAME="AGS_ui" ${AGS_RENDER_API}
+)
+
 target_include_directories(AGS_ui PUBLIC ./include/)

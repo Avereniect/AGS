@@ -5,7 +5,7 @@
 
 #include <ags/Vulkan_core.hpp>
 
-namespace ags::are::vk10 {
+namespace ags::are::vk_kernel {
 
     //=====================================================
     // -ctors

@@ -3,7 +3,7 @@
 //
 #include "Uniform_pack.hpp"
 
-namespace ags::are::gl43 {
+namespace ags::are::gl_kernel {
 
 
 

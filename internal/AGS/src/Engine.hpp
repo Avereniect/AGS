@@ -8,7 +8,7 @@
 namespace ags {
 
     ///
-    /// A class managing the core functionality of 
+    /// A class managing the core functionality of ARE.
     ///
     class Engine {
     public:
@@ -20,20 +20,12 @@ namespace ags {
         ///
         /// \return True if engine was initialized successfully. False
         ///     otherwise. May be false if engine was already initialized
-        static bool init();
+        static void init();
 
         ///
         /// Releases all resources acquired during initialization
         ///
         static void term();
-
-    private:
-
-        //=================================================
-        // Static members
-        //=================================================
-
-        static bool is_initialized;
 
     };
 

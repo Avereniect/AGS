@@ -5,7 +5,7 @@
 #ifndef AGS_UI_INCLUDE_WINDOWING_HPP
 #define AGS_UI_INCLUDE_WINDOWING_HPP
 
-#include <ags/Window_core.hpp>
+#include "../../../../AGS_core/src/Windowing_context.hpp"
 #include "../../../src/Window.hpp"
 
 #endif //AGS_UI_INCLUDE_WINDOWING_HPP

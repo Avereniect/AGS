@@ -2,21 +2,22 @@
 // Created by avereniect on 1/21/22.
 //
 
-#ifndef AGS_ARE_VK10_SHADER_HPP
-#define AGS_ARE_VK10_SHADER_HPP
+#ifndef AGS_ARE_VK_SHADER_HPP
+#define AGS_ARE_VK_SHADER_HPP
 
-#include "Includes.hpp"
-#include "Enum.hpp"
+#include <ags/Graphics_includes.hpp>
+
+#include "Enums.hpp"
 #include "Framebuffer.hpp"
 
 #include <ags/Types.hpp>
-#include <spirv-reflect/spirv_reflect.h>
+#include <spirv_reflect.h>
 
 #include <aul/containers/Multispan.hpp>
 
 #include <string>
 
-namespace ags::are::vk10 {
+namespace ags::are::vk_kernel {
 
     struct Vertex_attribute {
         Attribute_type type = Attribute_type::NULL_ATTRIBUTE_TYPE;
@@ -243,4 +244,4 @@ namespace ags::are::vk10 {
 
 }
 
-#endif //AGS_ARE_VK10_SHADER_HPP
+#endif //AGS_ARE_VK_SHADER_HPP

@@ -7,6 +7,19 @@
 
 namespace ags::apt {
 
+    Rand24::Rand24(uint32 seed):
+        x(seed) {}
+
+    uint32 Rand24::get_int() {
+        x = (a * x + c) & 0x00FF'FFFF;
+        return x;
+    }
+
+    float Rand24::get_float() {
+        static constexpr float denominator = 1.0f / 16777216.0f;
+        return float(get_int()) * denominator;
+    }
+
     int32 uniform_random(int32 seed) {
         int32 hash = 0;
 

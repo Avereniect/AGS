@@ -11,6 +11,52 @@
 
 namespace ags::apt {
 
+    class Rand24 {
+    public:
+
+        //=================================================
+        // -ctors
+        //=================================================
+
+        explicit Rand24(uint32 seed);
+
+        Rand24() = default;
+        Rand24(const Rand24&) = default;
+        Rand24(Rand24&&) noexcept = default;
+        ~Rand24() = default;
+
+        //=================================================
+        // Assignment Operators
+        //=================================================
+
+        Rand24& operator=(const Rand24&) = default;
+        Rand24& operator=(Rand24&&) noexcept = default;
+
+        //=================================================
+        // Operators
+        //=================================================
+
+        uint32 get_int();
+
+        float get_float();
+
+    private:
+
+        //=================================================
+        // Constants
+        //=================================================
+
+        static constexpr uint32 a = 0x043F'D43FD;
+        static constexpr uint32 c = 0x00C3'9EC3u;
+
+        //=================================================
+        // Instance members
+        //=================================================
+
+        uint32 x = 0;
+
+    };
+
     ///
     /// \param seed
     /// \return Random 32-bit integer

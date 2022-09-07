@@ -2,12 +2,12 @@
 // Created by avereniect on 1/12/22.
 //
 
-#ifndef AGS_GL43_UNIFORM_PACK_HPP
-#define AGS_GL43_UNIFORM_PACK_HPP
+#ifndef AGS_ARE_GL_UNIFORM_PACK_HPP
+#define AGS_ARE_GL_UNIFORM_PACK_HPP
 
-#include "../Enums.hpp"
+#include "../Enums_common.hpp"
 
-namespace ags::are::gl43 {
+namespace ags::are::gl_kernel {
 
     struct Uniform_header {
         Uniform_type type = Uniform_type::NULL_UNIFORM_TYPE;
@@ -17,16 +17,45 @@ namespace ags::are::gl43 {
     class Uniform_pack {
     public:
 
+        //=================================================
+        // -ctors
+        //=================================================
+
         Uniform_pack() = default;
+        Uniform_pack(const Uniform_pack&);
+        Uniform_pack(Uniform_pack&&);
         ~Uniform_pack();
+
+        //=================================================
+        // Assignment operators
+        //=================================================
+
+        Uniform_pack& operator=(const Uniform_pack&);
+
+        Uniform_pack& operator=(Uniform_pack&&) noexcept;
+
+        //=================================================
+        // Mutators
+        //=================================================
+
+
+
+        //=================================================
+        // Accessors
+        //=================================================
 
     private:
 
+        //=================================================
+        // Instance members
+        //=================================================
+
         unsigned char* data = nullptr;
+
         std::uint32_t buffer_size = 0;
 
     };
 
 }
 
-#endif //AGS_GL43_UNIFORM_PACK_HPP
+#endif //AGS_ARE_GL_UNIFORM_PACK_HPP

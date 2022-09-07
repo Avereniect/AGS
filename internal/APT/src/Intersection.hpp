@@ -38,11 +38,6 @@ namespace ags::apt {
 
     };
 
-    struct AABB_intersection {
-        float t;
-        vec3r location;
-    };
-
     ///
     /// \param o Ray origin
     /// \param dir Ray direction
@@ -50,6 +45,28 @@ namespace ags::apt {
     /// \return Intersection struct
     [[nodiscard]]
     Ray_triangle_intersection ray_triangle_intersection(vec3r o, uvec3r dir, Triangle triangle);
+
+
+
+
+    struct AABB_intersection {
+
+        //=================================================
+        // Conversion operators
+        //=================================================
+
+        operator bool() const noexcept {
+            return !std::isnan(t);
+        }
+
+        //=================================================
+        // Instance members
+        //=================================================
+
+        float t;
+        vec3r location;
+
+    };
 
     ///
     /// \param o Ray origin

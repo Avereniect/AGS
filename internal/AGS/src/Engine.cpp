@@ -4,35 +4,25 @@
 
 #include "Engine.hpp"
 
-#include <ags/Vulkan_core.hpp>
-#include <ags/Window_core.hpp>
+#include "../../AGS_core/src/Windowing_context.hpp"
 #include <ags/ARE.hpp>
+
+#include <cstdlib>
 
 namespace ags {
 
-    bool Engine::is_initialized = false;
-
-    bool Engine::init() {
-        if (is_initialized) {
-            return false;
-        }
+    void Engine::init() {
+        std::atexit([] () {
+            ags::Engine::term();
+        });
 
         ags::Windowing_context::init();
         are::ARE::init();
-
-        is_initialized = true;
-        return true;
     }
 
     void Engine::term() {
-        if (!is_initialized) {
-            return;
-        }
-
         are::ARE::term();
         Windowing_context::term();
-
-        is_initialized = false;
     }
 
 }

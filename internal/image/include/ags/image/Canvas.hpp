@@ -117,8 +117,8 @@ namespace ags::image {
     /// \tparam T Channel type
     /// \tparam C Channel count
     template<class T, std::uint32_t C>
-    class Canvas : Image_base {
-        using base = Image_base;
+    class Canvas : public Image {
+        using base = Image;
     public:
 
         //=================================================
@@ -133,8 +133,8 @@ namespace ags::image {
         using pointer = T*;
         using const_pointer = const T*;
 
-        using size_type = Image_base::size_type;
-        using difference_type = Image_base::difference_type;
+        using size_type = Image::size_type;
+        using difference_type = Image::difference_type;
 
         using reference = Pixel_reference<T, C>;
         using const_reference = Pixel_reference<const T, C>;
@@ -149,7 +149,7 @@ namespace ags::image {
         /// \param color Default color to set pixels to
         /// \param tw Size of image tiles. Must be power of two
         Canvas(size_type w, size_type h, pixel_type color, size_type tw = 16):
-            tiles({h, w}),
+            tile_matrix({h, w}),
             tile_width(aul::ceil2(tw)) {
 
             auto tile_size = tile_width * tile_width;
@@ -157,7 +157,7 @@ namespace ags::image {
                 for (size_type x = 0; x < w; ++x) {
                     for (size_type i = 0; i < tile_size; ++i) {
                         for (size_type j = 0; j < C; ++j) {
-                            tiles[y][x][C * i + j] = color[j];
+                            tile_matrix[y][x][C * i + j] = color[j];
                         }
                     }
                 }
@@ -179,7 +179,7 @@ namespace ags::image {
             Canvas(w, h, color, 16) {}
 
         Canvas(const Canvas& src):
-            tiles({src.tiles.dimensions()}),
+            tile_matrix({src.tile_matrix.dimensions()}),
             tile_width(src.tile_width) {
 
             auto tile_size = tile_width * tile_width;
@@ -187,15 +187,15 @@ namespace ags::image {
             auto dims = src.dimensions();
             for (size_type y = 0; y < dims[1]; ++y) {
                 for (size_type x = 0; x < dims[0]; ++x) {
-                    tiles[y][x] = new channel_type[tile_size * C];
+                    tile_matrix[y][x] = new channel_type[tile_size * C];
 
-                    std::copy_n(src.tiles[y][x], tile_size * C, tiles[y][x]);
+                    std::copy_n(src.tile_matrix[y][x], tile_size * C, tile_matrix[y][x]);
                 }
             }
         }
 
         Canvas(Canvas&& src) noexcept:
-            tiles(std::exchange(src.tiles, {})),
+            tile_matrix(std::exchange(src.tile_matrix, {})),
             tile_width(std::exchange(src.tile_width, 0)) {}
 
         ~Canvas() {
@@ -215,8 +215,8 @@ namespace ags::image {
 
         Canvas_subscriptor<T, C> operator[](size_type x) {
             return Canvas_subscriptor<T, C>{
-                tiles.data(),
-                tiles.dimensions()[1],
+                tile_matrix.data(),
+                tile_matrix.dimensions()[1],
                 x / tile_width,
                 x % tile_width,
                 tile_width
@@ -225,8 +225,8 @@ namespace ags::image {
 
         Canvas_subscriptor<const T, C> operator[](size_type x) const {
             return Canvas_subscriptor<const T, C>{
-                tiles.data(),
-                tiles.dimensions()[1],
+                tile_matrix.data(),
+                tile_matrix.dimensions()[1],
                 x / tile_width,
                 x % tile_width,
                 tile_width
@@ -260,13 +260,13 @@ namespace ags::image {
                 return;
             }
 
-            size_type old_x_tiles = tiles.dimensions()[1];
-            size_type old_y_tiles = tiles.dimensions()[0];
+            size_type old_x_tiles = tile_matrix.dimensions()[1];
+            size_type old_y_tiles = tile_matrix.dimensions()[0];
 
             size_type x_tiles = aul::divide_ceil(w, tile_width);
             size_type y_tiles = aul::divide_ceil(h, tile_width);
 
-            tiles.resize(x_tiles, y_tiles);
+            tile_matrix.resize(x_tiles, y_tiles);
 
             //TODO: Complete implementation
             //TODO: Consider if it's necessary to blank out tiles on shrinking
@@ -277,14 +277,27 @@ namespace ags::image {
         /// Resets image's size to (0,0). Releases held allocation
         ///
         void clear() {
-            for (auto t : tiles) {
+            for (auto t : tile_matrix) {
                 delete[] t;
             }
 
-            tiles.clear();
+            tile_matrix.clear();
 
             base::w = 0;
             base::h = 0;
+        }
+
+        //=================================================
+        // Accessors
+        //=================================================
+
+        [[nodiscard]]
+        size_type tile_size() const noexcept {
+            return tile_width;
+        }
+
+        aul::Matrix_view<const pointer, size_type, 2> tiles() const noexcept {
+            return tile_matrix;
         }
 
     private:
@@ -297,7 +310,7 @@ namespace ags::image {
         /// Matrix containing pointers to tiles. Each tile has dimensions
         /// tile_size
         ///
-        aul::Matrix<pointer, 2> tiles;
+        aul::Matrix<pointer, 2> tile_matrix;
 
         ///
         /// Side lengths of tiles. Cannot be changed after construction of

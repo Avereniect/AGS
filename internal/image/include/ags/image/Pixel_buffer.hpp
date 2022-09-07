@@ -59,16 +59,79 @@ namespace ags::image {
     private:
 
         T* ptr;
+
         std::uint32_t w;
         std::uint32_t x;
 
     };
 
-    template<class T, std::uint32_t C>
-    class Pixel_buffer_base : public Image_base {
-        static_assert(std::is_integral_v<T> || std::is_floating_point_v<T>);
+
+
+
+    class Pixel_buffer_base : public Image {
+        using base = Image;
     public:
 
+        //=================================================
+        // Type aliases
+        //=================================================
+
+        using pointer = void*;
+
+        using const_pointer = void*;
+
+        //=================================================
+        // -ctors
+        //=================================================
+
+        explicit Pixel_buffer_base(base::size_type w, base::size_type h, pointer ptr):
+            base(w, h),
+            ptr(ptr) {}
+
+        Pixel_buffer_base() = default;
+        Pixel_buffer_base(const Pixel_buffer_base&) = default;
+        Pixel_buffer_base(Pixel_buffer_base&&) noexcept = default;
+        ~Pixel_buffer_base() = default;
+
+        //=================================================
+        // Assignment operators
+        //=================================================
+
+        Pixel_buffer_base& operator=(const Pixel_buffer_base&) = default;
+        Pixel_buffer_base& operator=(Pixel_buffer_base&&) noexcept = default;
+
+        //=================================================
+        // Accessors
+        //=================================================
+
+        [[nodiscard]]
+        pointer data() {
+            return ptr;
+        }
+
+        [[nodiscard]]
+        const_pointer data() const {
+            return ptr;
+        }
+
+    protected:
+
+        //=================================================
+        // Instance members
+        //=================================================
+
+        pointer ptr = nullptr;
+
+    };
+
+
+
+    template<class T, std::uint32_t C>
+    class Pixel_buffer_common : public Pixel_buffer_base {
+        using base = Pixel_buffer_base;
+
+        static_assert(is_channel_type_v<T>);
+    public:
 
         //=================================================
         // Type aliases
@@ -79,39 +142,45 @@ namespace ags::image {
         using channel_type = T;
         using pixel_type = Pixel<channel_type , C>;
 
-        using pointer = T*;
+        using pointer = channel_type*;
         using const_pointer = const T*;
 
-        using size_type = Image_base::size_type;
-        using difference_type = Image_base::difference_type;
+        using size_type = base::size_type;
+        using difference_type = base::difference_type;
 
         using reference = Pixel_reference<T, C>;
         using const_reference = Pixel_reference<const T, C>;
+
+    private:
+
+        using subscripter = Pixel_buffer_subscripter<T, C>;
+        using const_subscripter = Pixel_buffer_subscripter<const T, C>;
+
+    public:
 
         //=================================================
         // -ctors
         //=================================================
 
-        Pixel_buffer_base(size_type w, size_type h, pointer data):
-            Image_base(w, h),
-            data(data) {}
+        Pixel_buffer_common(pointer ptr, size_type w, size_type h):
+            base(w, h, ptr) {}
 
-        Pixel_buffer_base() = default;
-        Pixel_buffer_base(const Pixel_buffer_base&) = delete;
+        Pixel_buffer_common() = default;
+        Pixel_buffer_common(const Pixel_buffer_common&) = delete;
 
-        Pixel_buffer_base(Pixel_buffer_base&& base) noexcept:
-            data(std::exchange(base.ptr, nullptr)) {}
+        Pixel_buffer_common(Pixel_buffer_common&& b) noexcept:
+            base(std::move(b), std::exchange(b.ptr, nullptr)) {}
 
-        ~Pixel_buffer_base() = default;
+        virtual ~Pixel_buffer_common() = 0;
 
         //=================================================
         // Assignment operators
         //=================================================
 
-        Pixel_buffer_base& operator=(const Pixel_buffer_base&) = delete;
+        Pixel_buffer_common& operator=(const Pixel_buffer_common&) = delete;
 
-        Pixel_buffer_base& operator=(Pixel_buffer_base&& base) noexcept {
-            data = std::exchange(base.ptr, nullptr);
+        Pixel_buffer_common& operator=(Pixel_buffer_common&& base) noexcept {
+            ptr = std::exchange(base.ptr, nullptr);
             return *this;
         }
 
@@ -119,23 +188,43 @@ namespace ags::image {
         // Subscript operators
         //=================================================
 
-        reference operator[](std::uint32_t x) {
-            return reference{data, w, x};
+        subscripter operator[](std::uint32_t x) {
+            return {data(), w, x};
         }
 
-        const_reference operator[](std::uint32_t x) const {
-            return const_reference{data, w, x};
+        const_subscripter operator[](std::uint32_t x) const {
+            return {data(), w, x};
+        }
+
+        //=================================================
+        // Accessors
+        //=================================================
+
+        ///
+        /// \return Number of color channels in image
+        [[nodiscard]]
+        std::uint32_t depth() const noexcept {
+            return C;
+        }
+
+        [[nodiscard]]
+        const_pointer data() const noexcept {
+            return reinterpret_cast<pointer>(ptr);
+        }
+
+        [[nodiscard]]
+        pointer data() noexcept {
+            return reinterpret_cast<pointer>(ptr);
         }
 
         //=================================================
         // Instance members
         //=================================================
 
-    protected:
-
-        pointer data;
-
     };
+
+    template<class T, std::uint32_t C>
+    Pixel_buffer_common<T, C>::~Pixel_buffer_common<T, C>()  {};
 
     ///
     /// A Pixel_buffer internally represents an image in a way that facilitates
@@ -148,8 +237,8 @@ namespace ags::image {
     /// \tparam T Channel type
     /// \tparam C Channel count
     template<class T, std::uint32_t C>
-    class Pixel_buffer : public Pixel_buffer_base<T, C>{
-        using base = Pixel_buffer_base<T, C>;
+    class Pixel_buffer : public Pixel_buffer_common<T, C>{
+        using base = Pixel_buffer_common<T, C>;
     public:
 
         using channel_type = typename base::channel_type;
@@ -165,40 +254,41 @@ namespace ags::image {
         // -ctors
         //=================================================
 
-        Pixel_buffer(size_type w, size_type h, pointer data):
-            base(w, h, new(std::align_val_t(image_alignment)) channel_type[w * h * C]) {
+        Pixel_buffer(size_type w, size_type h, pointer ptr):
+            base(new(std::align_val_t(image_alignment)) channel_type[w * h * C], w, h) {
 
-            std::copy_n(data, w * h * C, base::data);
+            std::copy_n(ptr, w * h * C, this->data());
         }
 
         Pixel_buffer(size_type w, size_type h, pixel_type color = {}):
-            base(w, h, new(std::align_val_t(image_alignment)) channel_type[w * h * C]) {
+            base(new(std::align_val_t(image_alignment)) channel_type[w * h * C], w, h) {
 
+            pointer contents = this->data();
             for (std::uint32_t i = 0; i < (w * h); ++i) {
                 for (std::uint32_t j = 0; j < C; ++j) {
-                    base::data[i * C + j] = color[j];
+                    contents[i * C + j] = color[j];
                 }
             }
         }
 
         Pixel_buffer():
-            base(0, 0, nullptr) {}
+            base(nullptr, 0, 0) {}
 
         Pixel_buffer(const Pixel_buffer& pb):
-            base(pb.w, pb.h, new (std::align_val_t(image_alignment)) channel_type[pb.w * pb.h * C]) {
+            base(new (std::align_val_t(image_alignment)) channel_type[pb.w * pb.h * C], pb.w, pb.h) {
 
-            std::copy_n(pb.data, pb.size() * C, base::data);
+            std::copy_n(pb.ptr, pb.size() * C, base::ptr);
         }
 
         Pixel_buffer(Pixel_buffer&& pb) noexcept:
-            base(pb.w, pb.h, pb.data) {
+            base(reinterpret_cast<typename base::pointer>(pb.ptr), pb.w, pb.h) {
 
             pb.w = 0;
             pb.h = 0;
-            pb.data = nullptr;
+            pb.ptr = nullptr;
         }
 
-        ~Pixel_buffer() {
+        ~Pixel_buffer() override {
             clear();
         }
 
@@ -211,16 +301,14 @@ namespace ags::image {
                 return *this;
             }
 
-            delete[] base::data;
-            base::data = std::exchange(rhs.data, nullptr);
-            base::w = std::exchange(rhs.w, 0);
-            base::w = std::exchange(rhs.h, 0);
+            Pixel_buffer tmp{rhs};
+            std::swap(*this, tmp);
 
             return *this;
         }
 
         Pixel_buffer& operator=(Pixel_buffer&& rhs) noexcept {
-            base::data = std::exchange(rhs.data, nullptr);
+            base::ptr = std::exchange(rhs.ptr, nullptr);
             base::w = std::exchange(rhs.w, 0);
             base::h = std::exchange(rhs.h, 0);
 
@@ -232,7 +320,7 @@ namespace ags::image {
         //=================================================
 
         void clear() {
-            delete[] base::data;
+            operator delete[](base::ptr, std::align_val_t{image_alignment});
         }
 
     };
@@ -248,8 +336,8 @@ namespace ags::image {
     /// \tparam T Channel type
     /// \tparam C Channel count
     template<class T, std::uint32_t C>
-    class Pixel_buffer_view : public Pixel_buffer_base<T, C> {
-        using base = Pixel_buffer_base<T, C>;
+    class Pixel_buffer_view : public Pixel_buffer_common<T, C> {
+        using base = Pixel_buffer_common<T, C>;
     public:
 
         //=================================================
@@ -269,8 +357,8 @@ namespace ags::image {
         // -ctors
         //=================================================
 
-        Pixel_buffer_view(size_type w, size_type h, pointer data):
-            base(w, h, data) {}
+        Pixel_buffer_view(size_type w, size_type h, pointer ptr):
+            base(w, h, ptr) {}
 
         Pixel_buffer_view() = default;
         Pixel_buffer_view(const Pixel_buffer_view&) = default;
@@ -290,6 +378,7 @@ namespace ags::image {
     // Explicit template instantiations
     //=====================================================
 
+    /*
     template class Pixel_buffer<std::uint8_t, 1>;
     template class Pixel_buffer<std::uint8_t, 2>;
     template class Pixel_buffer<std::uint8_t, 3>;
@@ -320,6 +409,7 @@ namespace ags::image {
     template class Pixel_buffer_view<float, 2>;
     template class Pixel_buffer_view<float, 3>;
     template class Pixel_buffer_view<float, 4>;
+    */
 
 }
 

@@ -12,7 +12,6 @@
 namespace ags::are {
 
     struct Color_attachment {
-        Sample_count sample_count = Sample_count::S1;
         Channel_format format = Channel_format::NULL_CHANNEL_FORMAT;
         ags::Primitive type = Primitive::NULL_PRIMITIVE;
     };

@@ -1,7 +1,12 @@
 cmake_minimum_required(VERSION 3.13)
 
-add_library(AGS_ARE_VK STATIC
-    ../Enums.hpp
+option(AGS_ARE_VULKAN_DEBUG OFF)
+
+add_library(AGS_ARE_VULKAN STATIC
+    ../Enums_common.hpp
+    ../Enums_common.cpp
+
+    ../Framebuffer_common.hpp
 
     Kernel.hpp
     Kernel.cpp
@@ -29,16 +34,27 @@ add_library(AGS_ARE_VK STATIC
 
     Mesh.hpp
     Mesh.cpp
+
+    Texture.hpp
+    Texture.cpp
+
+    Texture_kernel.hpp
+    Texture_kernel.cpp
 )
 
-target_link_libraries(AGS_ARE_VK
+target_link_libraries(AGS_ARE_VULKAN
     PUBLIC AGS_mesh
     PRIVATE vulkan shaderc spirv-reflect-static
 )
 
-set_target_properties(AGS_ARE_VK
-    PROPERTIES
-    CXX_VISIBILITY_PRESET hidden
+if (AGS_ARE_VULKAN_DEBUG)
+    target_compile_definitions(AGS_ARE_VULKAN
+        PRIVATE AGS_ARE_VULKAN_DEBUG
+    )
+endif()
+
+target_compile_definitions(AGS_ARE_VULKAN
+    PRIVATE AGS_MODULE_NAME="AGS_ARE_VULKAN"
 )
 
-set_target_properties(AGS_ARE_VK PROPERTIES LINKER_LANGUAGE CXX)
+set_target_properties(AGS_ARE_VULKAN PROPERTIES LINKER_LANGUAGE CXX)

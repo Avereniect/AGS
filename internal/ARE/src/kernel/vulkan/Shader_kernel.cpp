@@ -3,7 +3,7 @@
 //
 #include "Shader_kernel.hpp"
 
-namespace ags::are::vk10 {
+namespace ags::are::vk_kernel {
 
     //=====================================================
     // Static members

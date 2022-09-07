@@ -2,19 +2,20 @@
 // Created by avereniect on 1/22/22.
 //
 
-#ifndef AGS_ARE_VK10_FRAMEBUFFER_HPP
-#define AGS_ARE_VK10_FRAMEBUFFER_HPP
+#ifndef AGS_ARE_VK_FRAMEBUFFER_HPP
+#define AGS_ARE_VK_FRAMEBUFFER_HPP
 
-#include "Includes.hpp"
+#include <ags/Graphics_includes.hpp>
+
 #include "Render_pass.hpp"
-#include "../Framebuffer.hpp"
+#include "../Framebuffer_common.hpp"
 
 #include <cstdint>
 
 #include <aul/containers/Array_map.hpp>
 
 
-namespace ags::are::vk10 {
+namespace ags::are::vk_kernel {
 
     class Shader_program;
 
@@ -100,12 +101,16 @@ namespace ags::are::vk10 {
         // Accessors
         //=================================================
 
+        [[nodiscard]]
         std::uint32_t width() const;
 
+        [[nodiscard]]
         std::uint32_t height() const;
 
+        [[nodiscard]]
         std::array<std::uint32_t, 2> dimensions() const;
 
+        [[nodiscard]]
         operator bool() const;
 
     private:
@@ -136,4 +141,4 @@ namespace ags::are::vk10 {
 
 }
 
-#endif //AGS_ARE_VK10_FRAMEBUFFER_HPP
+#endif //AGS_ARE_VK_FRAMEBUFFER_HPP

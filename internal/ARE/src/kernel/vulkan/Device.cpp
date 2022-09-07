@@ -5,7 +5,7 @@
 
 #include <cstdint>
 
-namespace  ags::are::vk10 {
+namespace  ags::are::vk_kernel {
 
     Queue_type classify_queue(VkQueueFamilyProperties properties) {
         auto flags = properties.queueFlags;

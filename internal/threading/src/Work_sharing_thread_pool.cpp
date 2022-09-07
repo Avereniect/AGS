@@ -75,7 +75,19 @@ namespace ags::threading {
         start();
 
         auto wake_predicate = [&] () {
-            return m->ready_task_queue.empty();
+            if (!m->ready_task_queue.empty()) {
+                return false;
+            } else {
+                //Use of try_lock prevents deadlock with workers attempting to
+                //move tasks to ready_task_queue from waiting_task_queue
+                if (m->waiting_task_queue_mutex.try_lock()) {
+                    bool ret = m->waiting_task_queue.empty();
+                    m->waiting_task_queue_mutex.unlock();
+                    return ret;
+                } else {
+                    return false;
+                }
+            }
         };
 
         std::unique_lock lock{m->ready_task_queue_mutex};
@@ -209,25 +221,35 @@ namespace ags::threading {
                     << e.what() << std::endl;
             }
 
-            /*
             //Check if this task was the last one in its family
             bool was_last_task = false;
             {
                 std::lock_guard lk{pool.task_family_counts_mutex};
                 auto it = pool.task_family_counts.find(task.task_family);
-                auto& count = *it;
-                --count;
-                was_last_task = (count == 0);
+                if (it == pool.task_family_counts.end()) {
+                    std::cerr << "This should never happen" << std::endl;
+                }
+
+                was_last_task = (*it == 1);
 
                 if (was_last_task) {
                     pool.task_family_counts.erase(it);
+                } else {
+                    *it -= 1;
                 }
             }
 
             // If it was, add tasks waiting on the family from the
             // waiting_task_queue to the ready queue.
             if (was_last_task) {
-                std::lock_guard lk{pool.waiting_task_queue_mutex};
+                //Although locking both may lead to additional contention, it
+                //prevents a potential deadlock case when waiting for both
+                //queues to be empty
+                std::lock(
+                    pool.ready_task_queue_mutex,
+                    pool.waiting_task_queue_mutex
+                );
+
                 auto it0 = aul::binary_search(
                     pool.waiting_task_queue.begin(),
                     pool.waiting_task_queue.end(),
@@ -236,7 +258,10 @@ namespace ags::threading {
                 );
 
                 if (it0 == pool.waiting_task_queue.end()) {
-                    //No tasks waiting on the current task were found
+                    //No tasks waiting on the current task were found, so we can
+                    //continue with the next iteration a little sooner
+                    pool.ready_task_queue_mutex.unlock();
+                    pool.waiting_task_queue_mutex.unlock();
                     continue;
                 }
 
@@ -246,18 +271,16 @@ namespace ags::threading {
                 }
 
                 //Add tasks to ready queue
-                {
-                    std::lock_guard lk{pool.ready_task_queue_mutex};
-
-                    for (auto iter = it0; iter != it1; ++iter) {
-                        pool.ready_task_queue.emplace_back(std::move(*iter));
-                    }
+                for (auto iter = it0; iter != it1; ++iter) {
+                    pool.ready_task_queue.emplace_back(std::move(*iter));
                 }
 
                 //Remove tasks from waiting queue
                 pool.waiting_task_queue.erase(it0, it1);
+
+                pool.ready_task_queue_mutex.unlock();
+                pool.waiting_task_queue_mutex.unlock();
             }
-            */
         }
     }
 

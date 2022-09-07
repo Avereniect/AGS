@@ -2,14 +2,14 @@
 // Created by avereniect on 3/14/22.
 //
 
-#ifndef AGS_ARE_VK10_SHADER_KERNEL_HPP
-#define AGS_ARE_VK10_SHADER_KERNEL_HPP
+#ifndef AGS_ARE_VK_SHADER_KERNEL_HPP
+#define AGS_ARE_VK_SHADER_KERNEL_HPP
 
-#include "Includes.hpp"
+#include <ags/Graphics_includes.hpp>
 
 #include <shaderc/shaderc.hpp>
 
-namespace ags::are::vk10 {
+namespace ags::are::vk_kernel {
 
     class Shader;
     class Vertex_shader;
@@ -73,4 +73,4 @@ namespace ags::are::vk10 {
 
 }
 
-#endif //AGS_ARE_VK10_SHADER_KERNEL_HPP
+#endif //AGS_ARE_VK_SHADER_KERNEL_HPP

@@ -2,34 +2,34 @@
 // Created by avereniect on 11/27/21.
 //
 
-//#include "internal/image/include/IMG_image.hpp"
+#include <ags/image/Image.hpp>
 
-/*
-namespace ags {
+namespace ags::image {
 
-    std::uint32_t Image_base::width() const {
+    Image::~Image() {}
+
+    std::uint32_t Image::width() const {
         return w;
     }
 
-    std::uint32_t Image_base::height() const {
+    std::uint32_t Image::height() const {
         return h;
     }
 
-    std::array<std::uint32_t, 2> Image_base::dimensions() const {
+    std::array<std::uint32_t, 2> Image::dimensions() const {
         return {w, h};
     }
 
-    std::uint32_t Image_base::size() const {
+    std::uint32_t Image::size() const {
         return w * h;
     }
 
-    std::uint32_t Image_base::max_size() const {
+    std::uint32_t Image::max_size() const {
         return std::numeric_limits<size_type>::max();
     }
 
-    bool Image_base::empty() const {
+    bool Image::empty() const {
         return (w == 0) || (h == 0);
     }
 
 }
-*/

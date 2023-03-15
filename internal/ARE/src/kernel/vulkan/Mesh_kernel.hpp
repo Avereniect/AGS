@@ -18,9 +18,9 @@ namespace ags::are::vk_kernel {
         // State methods
         //=================================================
 
-        void init();
+        static void init();
 
-        void term();
+        static void term();
 
     private:
 

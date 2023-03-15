@@ -1,6 +1,3 @@
-//
-// Created by avereniect on 5/9/22.
-//
 #include "Dynamic_vertex_array.hpp"
 
 #include <algorithm>
@@ -18,7 +15,7 @@ namespace ags::mesh {
         attribute_map(src.attribute_map) {
 
         //TODO: Error handling
-        for (auto& attrib : attribute_map) {
+        for (auto& attrib : attribute_map.values()) {
             auto* orig = attrib.ptr;
 
             auto allocation_size =
@@ -57,7 +54,7 @@ namespace ags::mesh {
         num_vertices = rhs.num_vertices;
 
         attribute_map = rhs.attribute_map;
-        for (auto& attrib : attribute_map) {
+        for (auto& attrib : attribute_map.values()) {
             auto* orig = attrib.ptr;
 
             auto allocation_size =
@@ -145,12 +142,13 @@ namespace ags::mesh {
         if (it == attribute_map.end()) {
             return {};
         }
-        return *it;
+
+        return std::get<1>(*it);
     }
 
     bool Dynamic_vertex_array::remove_attribute(const std::string& name) {
         auto it = attribute_map.find(name);
-        free(it->ptr);
+        free(aul::get<1>(it));
 
         bool ret = it != attribute_map.end();
         attribute_map.erase(it);
@@ -161,9 +159,10 @@ namespace ags::mesh {
         free(index_array);
         num_indices = 0;
 
-        for (auto& attrib : attribute_map) {
+        for (auto& attrib : attribute_map.values()) {
             free(attrib.ptr);
         }
+
         num_vertices = 0;
     }
 
@@ -201,7 +200,7 @@ namespace ags::mesh {
         void* allocation = malloc(allocation_size);
         std::memcpy(allocation, ptr, allocation_size);
         auto [it, succ] = attribute_map.emplace_or_assign(name, p, w, allocation);
-        return *it;
+        return std::get<1>(*it);
     }
 
 }

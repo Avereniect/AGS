@@ -1,7 +1,3 @@
-//
-// Created by avereniect on 1/16/22.
-//
-
 #ifndef AGS_ARE_VK_DEVICE_HPP
 #define AGS_ARE_VK_DEVICE_HPP
 
@@ -117,4 +113,4 @@ namespace ags::are::vk_kernel {
 
 }
 
-#endif //AGS_ARE_VK10_DEVICE_HPP
+#endif //AGS_ARE_VK_DEVICE_HPP

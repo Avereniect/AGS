@@ -1,6 +1,3 @@
-//
-// Created by avereniect on 8/19/22.
-//
 #include "ags/mesh/Triangle_graph.hpp"
 
 namespace ags::mesh {

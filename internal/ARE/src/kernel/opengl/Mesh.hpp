@@ -7,7 +7,7 @@
 
 #include "Object.hpp"
 
-#include "../Enums_common.hpp"
+#include "Enums.hpp"
 
 #include <ags/Mesh.hpp>
 

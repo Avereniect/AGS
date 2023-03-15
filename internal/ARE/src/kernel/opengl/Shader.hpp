@@ -1,7 +1,3 @@
-//
-// Created by avereniect on 1/12/22.
-//
-
 #ifndef AGS_ARE_GL_SHADER_HPP
 #define AGS_ARE_GL_SHADER_HPP
 
@@ -193,6 +189,18 @@ namespace ags::are::gl_kernel {
         // -ctors
         //=================================================
 
+        Shader_program() = default;
+        Shader_program(const Shader_program&) = delete;
+        Shader_program(Shader_program&&);
+        ~Shader_program();
+
+        //=================================================
+        // Assignment operators
+        //=================================================
+
+        Shader_program& operator=(const Shader_program&) = delete;
+        Shader_program& operator=(Shader_program&&);
+
         //=================================================
         // Resource mutators
         //=================================================
@@ -254,24 +262,49 @@ namespace ags::are::gl_kernel {
         // Instance members
         //=================================================
 
+        ///
+        /// Map associating attribute locations to the type occupying it
+        ///
         aul::Array_map<std::uint32_t, Attribute_type> attribute_inputs{};
 
+        ///
+        /// Map associating uniform locations to the type occupying it
+        ///
         aul::Array_map<std::uint32_t, Uniform_type> uniform_inputs{};
 
+        ///
+        /// Map associating uniform names to their location
+        ///
         aul::Array_map<std::string, std::uint32_t> uniform_locations{};
 
+        ///
+        /// Map associating framebuffer locations to the format occupying that
+        /// location
+        ///
         aul::Array_map<std::uint32_t, Texture_format> framebuffer_outputs;
 
         //=================================================
         // Helper functions
         //=================================================
 
+        ///
+        /// Populate attribute_inputs
+        ///
         void query_attributes();
 
+        ///
+        /// Populate uniform_inputs
+        ///
         void query_uniforms();
 
+        ///
+        /// Populate uniform_locations
+        ///
         void query_uniform_blocks();
 
+        ///
+        /// Populate framebuffer_outputs
+        ///
         void query_framebuffer_outputs();
 
     };

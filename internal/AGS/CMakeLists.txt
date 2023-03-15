@@ -22,13 +22,13 @@ add_dependencies(AGS LINK_ASSETS)
 target_compile_features(AGS PUBLIC cxx_std_17)
 
 target_link_libraries(AGS
-    PUBLIC APT AGS_core AGS_ARE AGS_ui AUL AVML AVEL AGS_threading AGS_image STB
+    PUBLIC APT AGS_core AGS_ARE AGS_ui AGS_threading AGS_image STB
 )
 
-target_compile_options(AGS PRIVATE "-march=native") # "-fsanitize=address")
-target_link_options(AGS PRIVATE ) #"-fsanitize=address")
+target_compile_options(AGS PRIVATE "-march=native" "-fsanitize=address")
+target_link_options(AGS PRIVATE "-fsanitize=address")
 
 if (ipo_supported AND ${CMAKE_BUILD_TYPE} STREQUAL "Release")
     set_target_properties(AGS PROPERTIES INTERPROCEDURAL_OPTIMIZATION TRUE)
-    target_compile_options(AGS PRIVATE "-flto=auto")
+    #target_compile_options(AGS PRIVATE "-flto=auto")
 endif()

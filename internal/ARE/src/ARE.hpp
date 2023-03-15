@@ -12,8 +12,10 @@
 
 #ifdef AGS_VULKAN
 #include "kernel/vulkan/Kernel.hpp"
-
+#include "kernel/vulkan/Mesh.hpp"
 #include "kernel/vulkan/Texture.hpp"
+#include "kernel/vulkan/Framebuffer.hpp"
+#include "kernel/vulkan/Render_queue.hpp"
 
 #endif
 
@@ -36,11 +38,22 @@ namespace ags::are {
     //=====================================================
 
     #ifdef AGS_VULKAN
-    using Kernel = ags::are::vk_kernel::Kernel;
+    using Kernel = vk_kernel::Kernel;
 
-    using Texture1D = ags::are::vk_kernel::Texture1D;
-    using Texture2D = ags::are::vk_kernel::Texture2D;
-    using Texture3D = ags::are::vk_kernel::Texture3D;
+    using Compute_shader = vk_kernel::Compute_shader;
+    using Vertex_shader = vk_kernel::Vertex_shader;
+    using Fragment_shader = vk_kernel::Fragment_shader;
+    using Shader_program = vk_kernel::Shader_program;
+
+    using Mesh = vk_kernel::Mesh;
+
+    using Texture1D = vk_kernel::Texture1D;
+    using Texture2D = vk_kernel::Texture2D;
+    using Texture3D = vk_kernel::Texture3D;
+
+    using Framebuffer = vk_kernel::Framebuffer;
+
+    using Render_queue = vk_kernel::Render_queue;
 
     #endif
 
@@ -86,6 +99,11 @@ namespace ags::are {
         static bool is_initialized;
 
     };
+
+    void draw(
+        Render_queue& queue,
+        const vk_kernel::Window_data& window_data
+    );
 
     ///
     /// \param queue

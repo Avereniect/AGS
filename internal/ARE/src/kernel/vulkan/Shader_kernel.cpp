@@ -1,7 +1,6 @@
-//
-// Created by avereniect on 3/14/22.
-//
 #include "Shader_kernel.hpp"
+
+#include <glslang/Public/ShaderLang.h>
 
 namespace ags::are::vk_kernel {
 
@@ -9,9 +8,8 @@ namespace ags::are::vk_kernel {
     // Static members
     //=====================================================
 
-    thread_local shaderc::Compiler Shader_kernel::compiler{};
-
-    shaderc::CompileOptions Shader_kernel::options{create_options()};
+    //thread_local shaderc::Compiler Shader_kernel::compiler{};
+    //shaderc::CompileOptions Shader_kernel::options{create_options()};
 
     const vk::PipelineVertexInputStateCreateInfo Shader_kernel::default_pipeline_vertex_input_state_create_info{
         vk::PipelineVertexInputStateCreateFlags{},
@@ -123,17 +121,28 @@ namespace ags::are::vk_kernel {
     //=====================================================
 
     void Shader_kernel::init() {
-
+        ShInitialize();
     }
 
     void Shader_kernel::term() {
+        ShFinalize();
+    }
 
+    //=====================================================
+    // Utility Functions
+    //=====================================================
+
+    vk::PipelineMultisampleStateCreateInfo Shader_kernel::generate_multisample_create_info(Sample_count s) {
+        auto copy = default_pipeline_multisample_state_create_info;
+        copy.rasterizationSamples = to_native_enum(s);
+        return copy;
     }
 
     //=====================================================
     // Helper functions
     //=====================================================
 
+    /*
     shaderc::CompileOptions Shader_kernel::create_options() {
         shaderc::CompileOptions ret;
 
@@ -147,5 +156,6 @@ namespace ags::are::vk_kernel {
 
         return ret;
     }
+    */
 
 }

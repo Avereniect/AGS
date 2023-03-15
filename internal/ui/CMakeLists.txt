@@ -6,13 +6,11 @@ add_library(AGS_ui STATIC
 )
 
 target_link_libraries(AGS_ui
-    PUBLIC AGS_core AGS_ARE
+    PUBLIC AGS_core AGS_ARE glfw
 )
 
-set(AGS_USE_OPENGL ON)
-
 target_compile_definitions(AGS_ui
-    PRIVATE AGS_MODULE_NAME="AGS_ui" ${AGS_RENDER_API}
+    PRIVATE AGS_MODULE_NAME="AGS_ui"
 )
 
 target_include_directories(AGS_ui PUBLIC ./include/)

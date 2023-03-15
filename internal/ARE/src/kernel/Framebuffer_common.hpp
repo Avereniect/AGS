@@ -1,7 +1,3 @@
-//
-// Created by avereniect on 4/30/22.
-//
-
 #ifndef AGS_ARE_FRAMEBUFFER_HPP
 #define AGS_ARE_FRAMEBUFFER_HPP
 

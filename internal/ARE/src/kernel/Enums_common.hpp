@@ -1,7 +1,3 @@
-//
-// Created by avereniect on 12/17/21.
-//
-
 #ifndef AGS_ARE_ENUMS_HPP
 #define AGS_ARE_ENUMS_HPP
 
@@ -148,6 +144,8 @@ namespace ags::are {
         sRGBA = 8
     };
 
+    std::uint32_t format_width(Channel_format format);
+
     enum class Texture_format : std::uint8_t {
         NULL_TEXTURE_FORMAT,
         X8U, XY8U, XYZ8U, XYZW8U,
@@ -162,6 +160,8 @@ namespace ags::are {
     Channel_format to_channel_format(Texture_format);
 
     Primitive to_primitive(Texture_format);
+
+    std::uint32_t format_width(Texture_format);
 
     //=====================================================
     // Framebuffer attachment enums

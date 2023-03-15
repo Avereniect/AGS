@@ -1,7 +1,3 @@
-//
-// Created by avereniect on 5/9/22.
-//
-
 #ifndef AGS_DYNAMIC_VERTEX_ARRAY_HPP
 #define AGS_DYNAMIC_VERTEX_ARRAY_HPP
 

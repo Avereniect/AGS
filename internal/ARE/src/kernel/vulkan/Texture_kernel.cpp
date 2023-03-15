@@ -20,6 +20,7 @@ namespace ags::are::vk_kernel {
         Channel_format f,
         Primitive p
     ) {
+        //TODO: Implement
 
     }
 

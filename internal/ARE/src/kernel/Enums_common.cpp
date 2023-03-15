@@ -1,6 +1,3 @@
-//
-// Created by avereniect on 3/26/22.
-//
 #include "Enums_common.hpp"
 
 namespace ags::are {
@@ -115,6 +112,14 @@ namespace ags::are {
     //=====================================================
     // Texture format enums
     //=====================================================
+
+    std::uint32_t format_width(Channel_format format) {
+        return static_cast<std::uint32_t>(format) % 5;
+    }
+
+    std::uint32_t format_width(Texture_format format) {
+        return format_width(to_channel_format(format));
+    }
 
     Texture_format to_texture_format(Channel_format c, Primitive p) {
         auto i = static_cast<std::uint32_t>(c);

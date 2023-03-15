@@ -27,7 +27,7 @@ namespace ags::mesh {
 
         if (!scene) {
             AGS_ERROR(
-                "{}\n {1}",
+                "{0}\n {1}",
                 AGS_CODE_LOCATION,
                 "Failed to open file ",
                 path
@@ -36,18 +36,18 @@ namespace ags::mesh {
         }
 
         if (!scene->mNumMeshes) {
-            AGS_NOTIFY("File {0} contained no meshes", path);
+            AGS_INFO("File {0} contained no meshes", path);
             return {};
         }
         const aiMesh* mesh = scene->mMeshes[0];
 
         if (!mesh->HasPositions()) {
-            AGS_NOTIFY("The first mesh in file {0} had no position information", path);
+            AGS_INFO("The first mesh in file {0} had no position information", path);
             return {};
         }
 
         if (mesh->mNumVertices == 0) {
-            AGS_NOTIFY("The first mesh in file {0} had zero vertices", path);
+            AGS_INFO("The first mesh in file {0} had zero vertices", path);
             return {};
         }
 
@@ -138,18 +138,18 @@ namespace ags::mesh {
         Dynamic_vertex_array ret;
 
         if (!scene->mNumMeshes) {
-            AGS_NOTIFY("File {0} contained no meshes", path.c_str());
+            AGS_INFO("File {0} contained no meshes", path.c_str());
             return {};
         }
         const aiMesh* mesh = scene->mMeshes[0];
 
         if (!mesh->HasPositions()) {
-            AGS_NOTIFY("The first mesh in file {0} had no position information", path.c_str());
+            AGS_INFO("The first mesh in file {0} had no position information", path.c_str());
             return {};
         }
 
         if (mesh->mNumVertices == 0) {
-            AGS_NOTIFY("The first mesh in file {0} had zero vertices", path.c_str());
+            AGS_INFO("The first mesh in file {0} had zero vertices", path.c_str());
             return {};
         }
 

@@ -1,7 +1,3 @@
-//
-// Created by avereniect on 1/12/22.
-//
-
 #ifndef AGS_ARE_GL_UNIFORM_PACK_HPP
 #define AGS_ARE_GL_UNIFORM_PACK_HPP
 
@@ -22,7 +18,7 @@ namespace ags::are::gl_kernel {
         //=================================================
 
         Uniform_pack() = default;
-        Uniform_pack(const Uniform_pack&);
+        Uniform_pack(const Uniform_pack&) = delete;
         Uniform_pack(Uniform_pack&&);
         ~Uniform_pack();
 
@@ -30,7 +26,7 @@ namespace ags::are::gl_kernel {
         // Assignment operators
         //=================================================
 
-        Uniform_pack& operator=(const Uniform_pack&);
+        Uniform_pack& operator=(const Uniform_pack&) = delete;
 
         Uniform_pack& operator=(Uniform_pack&&) noexcept;
 

@@ -1,7 +1,3 @@
-//
-// Created by avereniect on 3/16/22.
-//
-
 #ifndef AGS_ARE_VK_MEMORY_KERNEL_HPP
 #define AGS_ARE_VK_MEMORY_KERNEL_HPP
 
@@ -48,12 +44,12 @@ namespace ags::are::vk_kernel {
         ///
         /// Initialize memory kernel
         ///
-        void init();
+        static void init();
 
         ///
         /// Terminate memory kernel
         ///
-        void term();
+        static void term();
 
         //=================================================
         // Buffer Allocation methods
@@ -77,10 +73,10 @@ namespace ags::are::vk_kernel {
         static vk::Buffer create_index_buffer(std::uint32_t size, Buffer_usage usage = {});
 
         ///
-        /// \param size Buffer size
-        /// \param usage Enum describing buffer usage
-        /// \return
-        static vk::Buffer create_image_buffer(std::uint32_t size, Buffer_usage usage = {});
+        /// \param image
+        /// \param size
+        /// \param usage
+        static void allocate_image_memory(vk::Image image, Buffer_usage usage = {});
 
     protected:
 
@@ -102,6 +98,11 @@ namespace ags::are::vk_kernel {
         /// List of heaps in order of suitability for dynamic allocations
         ///
         static std::vector<std::reference_wrapper<Heap>> dynamic_heaps;
+
+        ///
+        /// Memory type index ued for allocating images
+        ///
+        static std::uint32_t image_memory_index;
 
         //=================================================
         // Helper functions

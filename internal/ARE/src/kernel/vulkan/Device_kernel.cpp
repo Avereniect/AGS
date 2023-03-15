@@ -1,6 +1,3 @@
-//
-// Created by avereniect on 1/13/22.
-//
 #include "Device_kernel.hpp"
 #include <cstdint>
 
@@ -177,7 +174,7 @@ namespace ags::are::vk_kernel {
         for (std::uint32_t i = 0; i < d.queue_families.size(); ++i) {
             if (d.queue_families[i].type == Queue_type::COMPUTE) {
                 graphics_device.compute_queue = graphics_device.handle.getQueue(i, 0);
-                graphics_device.graphics_queue_index = i;
+                graphics_device.compute_queue_index = i;
             }
         }
 
@@ -206,7 +203,8 @@ namespace ags::are::vk_kernel {
 
         //Check that physical device supports required surface format
         //Note: It is assumed that if the device supports a particular format
-        // for the dummy surface then it supports that format for all surfaces.
+        //for the dummy surface then it supports that format for all surfaces
+        //which perhaps it doesn't.
         std::uint32_t format_count;
         auto t0 = d.handle.getSurfaceFormatsKHR(dummy_surface, &format_count, nullptr);
 

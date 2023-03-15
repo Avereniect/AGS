@@ -1,19 +1,43 @@
-//
-// Created by avereniect on 3/16/22.
-//
 #include "Memory_kernel.hpp"
 
 #include <ags/Logging.hpp>
 
 namespace ags::are::vk_kernel {
 
+    //=====================================================
+    // Static members
+    //=====================================================
+
+    std::vector<Heap> Memory_kernel::heaps{};
+
+    std::uint32_t Memory_kernel::image_memory_index = 0;
+
+    //=====================================================
+    // State functions
+    //=====================================================
+
     void Memory_kernel::init() {
         retrieve_heaps();
+
+        auto properties = graphics_device.physical_device.getMemoryProperties();
+
+        // Identify memory type index for images
+        for (std::size_t i = 0; i < properties.memoryTypes.size(); ++i) {
+            auto flags = properties.memoryTypes[i].propertyFlags;
+            auto suitable = (flags & vk::MemoryPropertyFlagBits::eDeviceLocal);
+            if (suitable) {
+                image_memory_index = i;
+            }
+        }
     }
 
     void Memory_kernel::term() {
 
     }
+
+    //=====================================================
+    // Helper functions
+    //=====================================================
 
     void Memory_kernel::retrieve_heaps() {
         auto memory_properties = graphics_device.physical_device.getMemoryProperties();
@@ -43,6 +67,31 @@ namespace ags::are::vk_kernel {
         return ret;
     }
 
+    void Memory_kernel::allocate_image_memory(vk::Image image, Buffer_usage usage) {
+        auto memory_requirements = graphics_device.handle.getImageMemoryRequirements(image);
 
+        //TODO: Leverage buffer usage parameter
+
+
+        auto properties = graphics_device.physical_device.getMemoryProperties();
+
+        // Identify memory type index for images
+        for (std::size_t i = 0; i < properties.memoryTypes.size(); ++i) {
+            auto flags = properties.memoryTypes[i].propertyFlags;
+            auto bit_set = memory_requirements.memoryTypeBits & (1 << i);
+            auto suitable = bit_set && (flags & vk::MemoryPropertyFlagBits::eDeviceLocal);
+            if (suitable) {
+                image_memory_index = i;
+            }
+        }
+
+        vk::MemoryAllocateInfo allocation_info{
+            memory_requirements.size,
+            image_memory_index
+        };
+
+        vk::DeviceMemory allocation = graphics_device.handle.allocateMemory(allocation_info);
+        graphics_device.handle.bindImageMemory(image, allocation, 0);
+    }
 
 }

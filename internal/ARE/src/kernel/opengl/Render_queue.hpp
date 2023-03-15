@@ -59,6 +59,13 @@ namespace ags::are::gl_kernel {
         //=================================================
 
         //TODO: Add support for uniform pack
+        ///
+        /// Adds a new entry to the render queue
+        ///
+        /// If any resource held by the paramters called
+        ///
+        /// \param mesh Mesh object ot draw
+        /// \param shader Shader to draw with
         void queue_draw_call(
             const Mesh& mesh,
             const Shader_program& shader
@@ -66,7 +73,7 @@ namespace ags::are::gl_kernel {
 
         ///
         /// Sort draw calls to minimize state changes when draw calls are
-        /// submitted to OpenGL
+        /// submitted
         ///
         void prepare();
 
@@ -87,6 +94,7 @@ namespace ags::are::gl_kernel {
         //=================================================
 
         std::vector<Draw_call> queue{};
+
         bool is_prepared = false;
         Queue_usage usage = Queue_usage::SINGLE;
 

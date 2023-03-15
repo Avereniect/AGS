@@ -1,6 +1,3 @@
-//
-// Created by avereniect on 1/16/22.
-//
 #include "Device.hpp"
 
 #include <cstdint>

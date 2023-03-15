@@ -1,13 +1,11 @@
-//
-// Created by avereniect on 3/14/22.
-//
-
 #ifndef AGS_ARE_VK_SHADER_KERNEL_HPP
 #define AGS_ARE_VK_SHADER_KERNEL_HPP
 
 #include <ags/Graphics_includes.hpp>
 
-#include <shaderc/shaderc.hpp>
+#include <glslang/Public/ShaderLang.h>
+
+#include "Enums.hpp"
 
 namespace ags::are::vk_kernel {
 
@@ -28,8 +26,14 @@ namespace ags::are::vk_kernel {
         // State methods
         //=================================================
 
-        void init();
-        void term();
+        static void init();
+        static void term();
+
+        //=================================================
+        // Utility Functions
+        //=================================================
+
+        static vk::PipelineMultisampleStateCreateInfo generate_multisample_create_info(Sample_count s);
 
     private:
 
@@ -37,9 +41,8 @@ namespace ags::are::vk_kernel {
         // Static members
         //=================================================
 
-        static thread_local shaderc::Compiler compiler;
-
-        static shaderc::CompileOptions options;
+        //static thread_local shaderc::Compiler compiler;
+        //static shaderc::CompileOptions options;
 
 
 
@@ -67,7 +70,7 @@ namespace ags::are::vk_kernel {
         // Helper functions
         //=================================================
 
-        static shaderc::CompileOptions create_options();
+        //static shaderc::CompileOptions create_options();
 
     };
 

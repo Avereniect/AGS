@@ -5,13 +5,15 @@ option(AGS_THREADING_BUILD_TESTS OFF)
 add_library(AGS_threading STATIC
     src/Work_sharing_thread_pool.hpp
     src/Work_sharing_thread_pool.cpp
+
+    src/Thread_pool.hpp
 )
 
 target_compile_definitions(AGS_threading
     PRIVATE AGS_MODULE_NAME=AGS_THREADING
 )
 
-target_link_libraries(AGS_threading PRIVATE AGS_core)
+target_link_libraries(AGS_threading PRIVATE AGS_core AUL)
 
 target_include_directories(AGS_threading PUBLIC ./include/)
 

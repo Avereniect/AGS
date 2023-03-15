@@ -1,7 +1,3 @@
-//
-// Created by avereniect on 3/12/22.
-//
-
 #ifndef AGS_ARE_VK_TEXTURE_HPP
 #define AGS_ARE_VK_TEXTURE_HPP
 
@@ -27,7 +23,7 @@ namespace ags::are::vk_kernel {
         //=================================================
 
         Texture2D() = default;
-        ~Texture2D();
+        ~Texture2D() = default; //TODO: Provide proper implementation
 
         //=================================================
         // Assignment Operators

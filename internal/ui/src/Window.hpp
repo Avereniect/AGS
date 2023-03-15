@@ -1,6 +1,3 @@
-//
-// Created by avereniect on 12/11/21.
-//
 #ifndef AGS_UI_WINDOW_HPP
 #define AGS_UI_WINDOW_HPP
 
@@ -178,6 +175,8 @@ namespace ags::ui {
         std::vector<vk::Image> swapchain_images;
         std::vector<vk::ImageView> swapchain_image_views;
 
+        vk::Semaphore image_available_semaphore;
+
         #endif
 
         //=================================================
@@ -195,6 +194,17 @@ namespace ags::ui {
         /// before calling
         ///
         static void setup_display_shader();
+
+        #if defined(AGS_VULKAN)
+
+        ///
+        /// Populates the swapchain, swapchain_image_coint, swapchain_images,
+        /// and swapchain_image_views,  instance variables
+        ///
+        /// \param x Width of swapchain images
+        /// \param y Height of swapchain images
+        void create_swapchain(std::uint32_t x, std::uint32_t y);
+        #endif
 
         //=================================================
         // Callbacks

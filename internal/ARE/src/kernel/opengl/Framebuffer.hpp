@@ -1,7 +1,3 @@
-//
-// Created by avereniect on 4/30/22.
-//
-
 #ifndef AGS_ARE_GL_FRAMEBUFFER_HPP
 #define AGS_ARE_GL_FRAMEBUFFER_HPP
 
@@ -33,8 +29,6 @@ namespace ags::are::gl_kernel {
     class Framebuffer : public Object {
     public:
 
-        //TODO: Add method to convert attachment to texture object
-
         //=================================================
         // -ctors
         //=================================================
@@ -64,21 +58,29 @@ namespace ags::are::gl_kernel {
         void specify_attachments(
             std::uint32_t w, std::uint32_t h,
             std::initializer_list<are::Color_attachment> color_attachments,
-            Depth_format format,
+            Depth_format depth_format,
             Sample_count samples = Sample_count::S1
         );
 
         void specify_attachments(
             std::uint32_t w, std::uint32_t h,
             std::initializer_list<are::Color_attachment> color_attachments,
-            Stencil_format format,
+            Stencil_format stencil_format,
             Sample_count samples = Sample_count::S1
         );
 
         void specify_attachments(
             std::uint32_t w, std::uint32_t h,
             std::initializer_list<are::Color_attachment> color_attachments,
-            Depth_stencil_format format,
+            Depth_format depth_format,
+            Stencil_format stencil_format,
+            Sample_count samples = Sample_count::S1
+        );
+
+        void specify_attachments(
+            std::uint32_t w, std::uint32_t h,
+            std::initializer_list<are::Color_attachment> color_attachments,
+            Depth_stencil_format depth_stencil_format,
             Sample_count samples = Sample_count::S1
         );
 

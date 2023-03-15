@@ -1,6 +1,3 @@
-//
-// Created by avereniect on 1/13/22.
-//
 #include "Kernel_base.hpp"
 
 #include <ags/Logging.hpp>

@@ -1,7 +1,3 @@
-//
-// Created by avereniect on 5/21/22.
-//
-
 #ifndef AGS_THREADING_WORK_SHARING_THREAD_POOL_HPP
 #define AGS_THREADING_WORK_SHARING_THREAD_POOL_HPP
 
@@ -316,7 +312,6 @@ namespace ags::threading {
         [[nodiscard]]
         size_type task_count();
 
-        ///
         ///
         /// \return Number of threads which the pool has.
         [[nodiscard]]

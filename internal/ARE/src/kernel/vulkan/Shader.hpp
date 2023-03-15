@@ -1,7 +1,3 @@
-//
-// Created by avereniect on 1/21/22.
-//
-
 #ifndef AGS_ARE_VK_SHADER_HPP
 #define AGS_ARE_VK_SHADER_HPP
 
@@ -11,35 +7,20 @@
 #include "Framebuffer.hpp"
 
 #include <ags/Types.hpp>
-#include <spirv_reflect.h>
 
-#include <aul/containers/Multispan.hpp>
+#include <aul/Span.hpp>
 
 #include <string>
 
 namespace ags::are::vk_kernel {
 
-    struct Vertex_attribute {
-        Attribute_type type = Attribute_type::NULL_ATTRIBUTE_TYPE;
-        std::uint8_t components = 0;
-        std::string name;
-    };
-
-    struct Shader_variable {
-        Primitive type;
-        std::string name;
-    };
-
-    /*
-    class Shader {
+    class Compute_shader {
     public:
 
 
     protected:
 
     };
-
-    */
 
     class Shader_program;
 
@@ -75,7 +56,7 @@ namespace ags::are::vk_kernel {
         ///
         /// \param source String view over string representing source code for
         /// vertex shader
-        void load_source(std::string_view source);
+        void load_glsl(std::string_view source);
 
         ///
         /// Load Spir-V bytecode.
@@ -85,14 +66,20 @@ namespace ags::are::vk_kernel {
         /// bytecode is always a multiple of four bytes.
         ///
         /// \param bytecode Span over bytecode for vertex shader
-        void load_bytecode(aul::Span<const std::uint32_t> bytecode);
+        void load_spirv(aul::Span<const std::uint32_t> bytecode);
 
+        ///
+        /// Release resource held by this object
+        ///
         void unload();
 
         //=================================================
         // Conversion operators
         //=================================================
 
+        ///
+        /// \return true if the object currently holds a resource and false
+        /// otherwise
         operator bool() const noexcept;
 
     private:
@@ -101,7 +88,7 @@ namespace ags::are::vk_kernel {
         // Instance members
         //=================================================
 
-        vk::ShaderModule module;
+        vk::ShaderModule shader_module;
 
         #if defined(AGS_ARE_VK10_DEBUG)
         std::unique_ptr<SpvReflectShaderModule> reflect_data;
@@ -149,7 +136,7 @@ namespace ags::are::vk_kernel {
         ///
         /// \param source String view over string representing source code for
         /// fragment shader
-        void load_source(std::string_view source);
+        void load_glsl(std::string_view source);
 
         ///
         /// Load Spir-V bytecode.
@@ -159,7 +146,21 @@ namespace ags::are::vk_kernel {
         /// bytecode is always a multiple of four bytes.
         ///
         /// \param bytecode Span over bytecode for fragment shader
-        void load_bytecode(aul::Span<const std::uint32_t> bytecode);
+        void load_spirv(aul::Span<const std::uint32_t> bytecode);
+
+        ///
+        /// Release resource held by this object
+        ///
+        void unload();
+
+        //=================================================
+        // Conversion operators
+        //=================================================
+
+        ///
+        /// \return true if the object currently holds a resource and false
+        /// otherwise
+        operator bool() const noexcept;
 
     private:
 
@@ -167,7 +168,7 @@ namespace ags::are::vk_kernel {
         // Instance members
         //=================================================
 
-        vk::ShaderModule module;
+        vk::ShaderModule shader_module;
 
         #if defined(AGS_ARE_VK10_DEBUG)
         std::unique_ptr<SpvReflectShaderModule> reflect_data;
@@ -217,16 +218,21 @@ namespace ags::are::vk_kernel {
         /// \param fs Fragment shader
         void compose(const Framebuffer& framebuffer, const Vertex_shader& vs, const Fragment_shader& fs);
 
-        // Release resource held by this object
+        ///
+        /// Release resource held by this object
+        ///
         void unload();
+
+        ///
+        /// \return
+        vk::Pipeline native_handle() const;
 
         //=================================================
         // Conversion operators
         //=================================================
 
+        [[nodiscard]]
         operator bool() const;
-
-        operator vk::Pipeline() const;
 
     private:
 
@@ -235,6 +241,8 @@ namespace ags::are::vk_kernel {
         //=================================================
 
         vk::Pipeline pipeline{};
+
+        vk::PipelineLayout pipeline_layout{};
 
         //=================================================
         // Helper functions

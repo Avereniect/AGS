@@ -1,6 +1,3 @@
-//
-// Created by avereniect on 3/12/22.
-//
 #include "Enums.hpp"
 
 namespace ags::are::vk_kernel {
@@ -13,8 +10,7 @@ namespace ags::are::vk_kernel {
         case Sample_count::S8: return vk::SampleCountFlagBits::e8;
         case Sample_count::S16: return vk::SampleCountFlagBits::e16;
         case Sample_count::S32: return vk::SampleCountFlagBits::e32;
-        default:
-            ; //Error
+        default: return vk::SampleCountFlagBits::e1; //Error //TODO: Log
         }
     }
 
@@ -22,10 +18,10 @@ namespace ags::are::vk_kernel {
         switch (primitive) {
             case Primitive::UINT8: {
                 static constexpr vk::Format table[] {
-                    vk::Format::eR8Uint,
-                    vk::Format::eR8G8Uint,
-                    vk::Format::eB8G8R8A8Uint,
-                    vk::Format::eA8B8G8R8UintPack32
+                    vk::Format::eB8G8R8A8Unorm,
+                    vk::Format::eB8G8R8A8Unorm, //TODO: Correct
+                    vk::Format::eB8G8R8A8Unorm,
+                    vk::Format::eB8G8R8A8Unorm
                 };
 
                 return table[static_cast<std::uint32_t>(f) - 1];
@@ -46,8 +42,7 @@ namespace ags::are::vk_kernel {
         switch (f) {
         case Stencil_format::NULL_STENCIL_FORMAT: return vk::Format::eUndefined;
         case Stencil_format::STENCIL8: return vk::Format::eS8Uint;
-        default:
-            ; //Error
+        default: return vk::Format::eUndefined; //Error TODO: log
         }
     }
 
@@ -56,7 +51,7 @@ namespace ags::are::vk_kernel {
         case Depth_format::NULL_DEPTH_FORMAT: return vk::Format::eUndefined;
         case Depth_format::INT24: return vk::Format::eX8D24UnormPack32;
         default:
-            ; //Error
+            return vk::Format::eUndefined; //Error
         }
     }
 
@@ -69,30 +64,80 @@ namespace ags::are::vk_kernel {
         case Depth_stencil_format::INT24_STENCIL8: return vk::Format::eD24UnormS8Uint;
         case Depth_stencil_format::FLOAT32_STENCIL8: return vk::Format::eD32SfloatS8Uint;
         default:
-            ; //Error;
+            return vk::Format::eUndefined; //Error;
         }
     }
 
     vk::Format to_native_enum(Texture_format format) {
-        Primitive p = to_primitive_type(format);
+        //TODO: Complete implementation
+        Primitive p = to_primitive(format);
+
         switch (p) {
-        case Primitive::UINT8: {
-            static constexpr table[] {
-                vk::Format
-            };
-        }
-        case Primitive::UINT16: {
+            case Primitive::UINT8: {
+                static constexpr vk::Format table[] {
 
-        }
-        case Primitive::UINT32: {
+                };
 
-        }
-        case Primitive::FLOAT16: {
+            }
+            case Primitive::UINT16: {
 
+            }
+            case Primitive::UINT32: {
+
+            }
+            case Primitive::FLOAT16: {
+
+            }
+            case Primitive::FLOAT32: {
+
+            }
+            default: {
+                return vk::Format::eUndefined;
+            }
         }
+    }
+
+    vk::Format to_native_enum(Attribute_type type) {
+        auto width = attribute_width(type);
+        auto primitive = attribute_primitive(type);
+
+        switch (primitive) {
         case Primitive::FLOAT32: {
+            vk::Format table[] {
+                vk::Format::eR32Sfloat,
+                vk::Format::eR32G32Sfloat,
+                vk::Format::eR32G32B32Sfloat,
+                vk::Format::eR32G32B32A32Sfloat
+            };
 
+            return table[int(width) - 1];
         }
+
+        case Primitive::UINT32: {
+            vk::Format table[] {
+                vk::Format::eR32Uint,
+                vk::Format::eR32G32Uint,
+                vk::Format::eR32G32B32Uint,
+                vk::Format::eR32G32B32A32Uint
+            };
+
+            return table[int(width) - 1];
+        }
+
+        case Primitive::INT32: {
+            vk::Format table[] {
+                vk::Format::eR32Sint,
+                vk::Format::eR32G32Sint,
+                vk::Format::eR32G32B32Sint,
+                vk::Format::eR32G32B32A32Sint
+            };
+
+            return table[int(width) - 1];
+        }
+
+        default:
+            AGS_ERROR("Unrecognized are::Attribute_type enum");
+            return vk::Format::eUndefined;
         }
     }
 

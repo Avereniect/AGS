@@ -1,7 +1,3 @@
-//
-// Created by avereniect on 1/1/22.
-//
-
 #ifndef AGS_MESH_VERTEX_ARRAY_HPP
 #define AGS_MESH_VERTEX_ARRAY_HPP
 

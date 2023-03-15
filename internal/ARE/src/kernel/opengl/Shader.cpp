@@ -1,6 +1,3 @@
-//
-// Created by avereniect on 1/12/22.
-//
 #include "Shader.hpp"
 #include "Shader_kernel.hpp"
 
@@ -219,6 +216,10 @@ namespace ags::are::gl_kernel {
     //=========================================================================
     // Shader_program
     //=========================================================================
+
+    Shader_program::~Shader_program() {
+        Shader_kernel::release_shader_program(id);
+    }
 
     void Shader_program::compose(const Framebuffer& framebuffer, const Vertex_shader& vs, const Fragment_shader& fs) {
         id = Shader_kernel::acquire_shader_program();

@@ -1,7 +1,3 @@
-//
-// Created by avereniect on 1/22/22.
-//
-
 #ifndef AGS_ARE_VK_RENDER_QUEUE_HPP
 #define AGS_ARE_VK_RENDER_QUEUE_HPP
 
@@ -52,17 +48,29 @@ namespace ags::are::vk_kernel {
         /// \param mesh Mesh to draw
         /// \param shader Shader to draw mesh with
         /// \param framebuffer Framebuffer to draw to
-        void enqueue(
+        void queue_draw_call(
+            const Framebuffer& framebuffer,
             const Mesh& mesh,
-            const Shader_program& shader,
-            const Framebuffer& framebuffer
+            const Shader_program& shader
         );
+
+        ///
+        /// Performs work that must be done before the queue can be submitted
+        ///
+        void prepare();
 
         ///
         /// Clear all previously recorded commands and restore contents of
         /// buffer to empty state.
         ///
         void clear();
+
+        //=================================================
+        // Accessors
+        //=================================================
+
+        [[nodiscard]]
+        vk::CommandBuffer native_handle() const;
 
     private:
 
@@ -71,6 +79,8 @@ namespace ags::are::vk_kernel {
         //=================================================
 
         vk::CommandBuffer command_buffer;
+
+        bool is_recording = false;
 
     };
 

@@ -1,6 +1,3 @@
-//
-// Created by avereniect on 5/21/22.
-//
 #include "Work_sharing_thread_pool.hpp"
 
 #include <chrono>
@@ -230,12 +227,14 @@ namespace ags::threading {
                     std::cerr << "This should never happen" << std::endl;
                 }
 
-                was_last_task = (*it == 1);
+                auto [key, val] = *it;
+
+                was_last_task = (val == 1);
 
                 if (was_last_task) {
                     pool.task_family_counts.erase(it);
                 } else {
-                    *it -= 1;
+                    val -= 1; //TODO: Check that this decrements the original value in the map
                 }
             }
 

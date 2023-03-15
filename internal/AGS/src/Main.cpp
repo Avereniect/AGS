@@ -9,14 +9,13 @@
 //#define AVEL_SSE2
 //#include <avel/Avel.hpp>
 
-#define AVML_AVX512BW
-#define AVML_AVX512VL
-#define AVML_AVX512F
-#define AVEL_SSE2
-#include <avml/AVML.hpp>
+//#define AVML_AVX512BW
+//#define AVML_AVX512VL
+//#define AVML_AVX512F
+//#define AVEL_SSE2
+//#include <avml/AVML.hpp>
 
 #include "Engine.hpp"
-
 
 //TODO: Fix issue if ARE header is included after windowing header when building with OpenGL
 #include <ags/Logging.hpp>
@@ -79,17 +78,19 @@ namespace ags {
             win.width(),
             win.height(),
             {
-                are::Color_attachment{are::Channel_format::XYZ, Primitive::UINT8}
+                are::Color_attachment{are::Channel_format::XYZW, Primitive::UINT8}
             },
             are::Depth_format::FLOAT32,
             are::Sample_count::S4
         );
 
-        auto vert_source = read_ascii_text("./assets/shaders/glsl43/shader.vert");
+        auto vert_source = read_ascii_text("./assets/shaders/vk/shader.vert");
+        //auto vert_source = read_ascii_text("./assets/shaders/glsl43/shader.vert");
         are::Vertex_shader vert_shader{};
         vert_shader.load_glsl(vert_source);
 
-        auto frag_source = read_ascii_text("./assets/shaders/glsl43/shader.frag");
+        auto frag_source = read_ascii_text("./assets/shaders/vk/shader.frag");
+        //auto frag_source = read_ascii_text("./assets/shaders/glsl43/shader.frag");
         are::Fragment_shader frag_shader{};
         frag_shader.load_glsl(frag_source);
 
@@ -99,8 +100,8 @@ namespace ags {
         are::Render_queue render_queue{};
 
         while (!win.should_close()) {
-            are::Kernel::poll_errors();
-            render_queue.queue_draw_call(mesh, shader_program);
+            //are::Kernel::poll_errors();
+            render_queue.queue_draw_call(framebuffer, mesh, shader_program);
             are::draw(render_queue, framebuffer);
 
             win.refresh(framebuffer);
@@ -117,38 +118,9 @@ int engine_main(int argc, char* argv[]) {
     return EXIT_SUCCESS;
 }
 
-/*
 int sandbox_main(int argc, char* argv[]) {
-    std::string shader_bytecode_path{
-        "/mnt/hard_disk/Technology/Repos/AGS/assets/shaders/glsl43/shaderf.spv"
-    };
-
-    std::FILE* file = fopen(shader_bytecode_path.c_str(), "r");
-    if (!file) {
-        std::cerr << strerror(errno) << std::endl;
-        exit(EXIT_FAILURE);
-    }
-
-    fseek(file, 0l, SEEK_END);
-    std::size_t file_size = ftell(file);
-    rewind(file);
-
-    std::vector<std::uint32_t> bytecode{};
-    bytecode.resize(file_size / 4);
-
-    fread(bytecode.data(), sizeof(std::uint32_t), bytecode.size(), file);
-
-
-    SpvReflectShaderModule reflect_module;
-    SpvReflectResult result = spvReflectCreateShaderModule(
-        bytecode.size() * sizeof(std::uint32_t),
-        bytecode.data(),
-        &reflect_module
-    );
-
     return EXIT_SUCCESS;
 }
-*/
 
 int apt_main(int argc, char* argv[]) {
     namespace apt = ags::apt;

@@ -1,6 +1,3 @@
-//
-// Created by avereniect on 6/30/22.
-//
 #include "ags/mesh/Vertex_array.hpp"
 
 namespace ags::mesh {
@@ -16,7 +13,7 @@ namespace ags::mesh {
         attribute_map(src.attribute_map) {
 
         //TODO: Error handling
-        for (auto& attrib : attribute_map) {
+        for (auto& attrib : attribute_map.values()) {
             auto* orig = attrib.ptr;
 
             auto allocation_size =
@@ -55,7 +52,7 @@ namespace ags::mesh {
         num_vertices = rhs.num_vertices;
 
         attribute_map = rhs.attribute_map;
-        for (auto& attrib : attribute_map) {
+        for (auto& attrib : attribute_map.values()) {
             auto* orig = attrib.ptr;
 
             auto allocation_size =
@@ -132,7 +129,7 @@ namespace ags::mesh {
 
     bool Vertex_array::remove_attribute(std::uint32_t name) {
         auto it = attribute_map.find(name);
-        free(it->ptr);
+        free(aul::get<1>(it));
 
         bool ret = it != attribute_map.end();
         attribute_map.erase(it);
@@ -165,7 +162,7 @@ namespace ags::mesh {
             return {};
         }
 
-        return *it;
+        return std::get<1>(*it);
     }
 
     std::uint32_t Vertex_array::index_count() const {
@@ -206,7 +203,7 @@ namespace ags::mesh {
         void* allocation = malloc(allocation_size);
         std::memcpy(allocation, ptr, allocation_size);
         auto [it, succ] = attribute_map.emplace_or_assign(location, p, w, allocation);
-        return *it;
+        return std::get<1>(*it);
     }
 
 }

@@ -27,14 +27,16 @@ if (AGS_USE_VULKAN)
     target_compile_definitions(AGS_core PUBLIC AGS_VULKAN)
 endif()
 
-target_link_libraries(AGS_core PUBLIC AUL AVML spdlog glfw ${AGS_GRAPHICS_LIBRARIES})
+target_link_libraries(AGS_core PUBLIC AUL AVML glfw quill ${AGS_GRAPHICS_LIBRARIES})
 
 target_compile_definitions(AGS_core
     PRIVATE AGS_MODULE_NAME=AGS_core
 )
 
 target_include_directories(AGS_core
+    PRIVATE
+    ${PROJECT_SOURCE_DIR}/external/quill/quill/include/
     PUBLIC
-    ../../external/half-2.2.0/include/
+    ${PROJECT_SOURCE_DIR}/external/half-2.2.0/include/
     ./include/
 )

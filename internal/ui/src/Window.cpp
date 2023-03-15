@@ -1,7 +1,3 @@
-//
-// Created by avereniect on 12/11/21.
-//
-
 #include "Window.hpp"
 
 #include <ags/Util.hpp>
@@ -21,11 +17,14 @@ namespace ags::ui {
     // Static members
     //=====================================================
 
+    #if defined(AGS_OPENGL)
     GLuint Window::display_vao = 0;
 
     GLuint Window::display_vertex_shader = 0;
     GLuint Window::display_fragment_shader = 0;
     GLuint Window::display_shader_program = 0;
+
+    #endif
 
     //=====================================================
     // -ctors
@@ -90,8 +89,10 @@ namespace ags::ui {
             std::cerr << "Failed to create window surface" << std::endl;
         }
 
+        auto graphics_device = are::Kernel::get_graphics_device();
+
         vkGetPhysicalDeviceSurfaceCapabilitiesKHR(
-            are::Kernel::get_graphics_device().physical_device,//Vulkan_context::graphics_device.physical_device,
+            graphics_device.physical_device,
             surface,
             &surface_capabilities
         );
@@ -100,6 +101,22 @@ namespace ags::ui {
             surface_capabilities.minImageCount + 1,
             surface_capabilities.maxImageCount
         );
+
+        vk::SemaphoreCreateInfo semaphore_create_info{
+
+        };
+
+        auto semaphore_creation_result = graphics_device.handle.createSemaphore(
+            &semaphore_create_info,
+            nullptr,
+            &image_available_semaphore
+        );
+
+        if (semaphore_creation_result != vk::Result::eSuccess) {
+            AGS_ERROR("Failed to create semaphore in creation of window");
+            //TODO: Handle clean up?
+            std::exit(EXIT_FAILURE);
+        }
 
         #endif
 
@@ -132,8 +149,10 @@ namespace ags::ui {
         vkDestroySurfaceKHR(are::Kernel::get_instance(), surface, nullptr);
         #endif
 
+        #if defined(AGS_OPENGL)
         glfwMakeContextCurrent(handle);
         glDeleteVertexArrays(1, &display_vao);
+        #endif
 
         glfwDestroyWindow(handle);
     }
@@ -193,6 +212,37 @@ namespace ags::ui {
     }
 
     void Window::refresh(const ags::are::Texture2D& texture) {
+        #if defined(AGS_VULKAN)
+        auto graphics_device = are::Kernel::get_graphics_device().handle;
+
+        /*
+        vk::AcquireNextImageInfoKHR acquire_info{
+            swapchain,
+            UINT64_MAX,
+            image_available_semaphore,
+            VK_NULL_HANDLE,
+
+        };
+        */
+
+        std::uint32_t image_index;
+        vkAcquireNextImageKHR(
+            graphics_device,
+            swapchain,
+            UINT64_MAX,
+            image_available_semaphore,
+            VK_NULL_HANDLE,
+            &image_index
+        );
+
+        vk::PresentInfoKHR present_info{
+            {},
+            {swapchain},
+            {} //TODO: Specify image indices
+        };
+
+        #endif
+
         #if defined(AGS_OPENGL)
         glfwMakeContextCurrent(handle);
 
@@ -321,7 +371,7 @@ namespace ags::ui {
     GLFWwindow* Window::create_handle(std::uint32_t x, std::uint32_t y, const std::string& title) {
         glfwWindowHint(GLFW_VISIBLE, GLFW_TRUE);
 
-        #ifdef AGS_VULKAN10
+        #ifdef AGS_VULKAN
         glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
         #else
         glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
@@ -338,6 +388,7 @@ namespace ags::ui {
         return tmp;
     }
 
+    #if defined(AGS_OPENGL)
     void Window::setup_display_shader() {
         if (display_shader_program) {
             return;
@@ -407,10 +458,11 @@ namespace ags::ui {
 
         are::Kernel::poll_errors();
     }
+    #endif
 
-    #ifdef AGS_VULKAN10
+    #ifdef AGS_VULKAN
     void Window::create_swapchain(std::uint32_t x, std::uint32_t y) {
-        using are::vk10::Kernel;
+        using are::Kernel;
         auto& graphics_device = Kernel::get_graphics_device();
 
         vk::SwapchainCreateInfoKHR swapchain_create_info{

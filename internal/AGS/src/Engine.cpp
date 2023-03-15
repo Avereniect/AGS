@@ -1,7 +1,3 @@
-//
-// Created by avereniect on 12/11/21.
-//
-
 #include "Engine.hpp"
 
 #include "../../AGS_core/src/Windowing_context.hpp"

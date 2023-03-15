@@ -19,10 +19,14 @@ if (AGS_USE_VULKAN)
     target_compile_definitions(AGS_ARE PRIVATE AGS_ARE_VULKAN)
 endif()
 
+if (NOT DEFINED AGS_USE_VULKAN AND NOT DEFINED AGS_USE_OPENGL)
+    message(FATAL_ERROR "No render API was selected")
+endif()
+
 
 
 if (AGS_ARE_DEBUG)
-    target_compile_definitions(AGS_ARE PRIVATE AGS_ARE_DEBUG)
+    target_compile_definitions(AGS_ARE PRIVATE ARE_DEBUG)
 
     if(AGS_USE_OPENGL)
         set(AGS_ARE_OPENGL_DEBUG ON)
@@ -43,4 +47,10 @@ target_compile_definitions(AGS_ARE
     PRIVATE AGS_MODULE_NAME="AGS_ARE"
 )
 
-target_include_directories(AGS_ARE PUBLIC ./include/ ../../external/)
+target_include_directories(AGS_ARE
+    PRIVATE
+    ${PROJECT_SOURCE_DIR}/external/quill/quill/include/
+
+    PUBLIC
+    ./include/
+)

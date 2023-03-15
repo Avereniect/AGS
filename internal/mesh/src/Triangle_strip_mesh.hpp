@@ -1,7 +1,3 @@
-//
-// Created by avereniect on 5/19/22.
-//
-
 #ifndef AGS_MESH_TRIANGLE_STRIP_MESH_HPP
 #define AGS_MESH_TRIANGLE_STRIP_MESH_HPP
 

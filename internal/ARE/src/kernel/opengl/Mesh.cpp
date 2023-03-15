@@ -114,7 +114,7 @@ namespace ags::are::gl_kernel {
         glDeleteVertexArrays(1, &id);
         glDeleteBuffers(1, &id);
 
-        for (auto attrib : attributes) {
+        for (auto attrib : attributes.values()) {
             glDeleteBuffers(1, &attrib.handle);
         }
 
@@ -146,7 +146,7 @@ namespace ags::are::gl_kernel {
         if (it == attributes.end()) {
             return Attribute_type::NULL_ATTRIBUTE_TYPE;
         } else {
-            return it->type;
+            return aul::get<1>(it)->type;
         }
     }
 

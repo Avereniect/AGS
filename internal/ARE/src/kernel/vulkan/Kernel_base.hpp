@@ -1,7 +1,3 @@
-//
-// Created by avereniect on 1/13/22.
-//
-
 #ifndef AGS_ARE_VK_KERNEL_BASE_HPP
 #define AGS_ARE_VK_KERNEL_BASE_HPP
 

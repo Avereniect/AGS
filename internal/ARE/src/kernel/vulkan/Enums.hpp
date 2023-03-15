@@ -25,6 +25,8 @@ namespace ags::are::vk_kernel {
 
     vk::Format to_native_enum(Texture_format format);
 
+    vk::Format to_native_enum(Attribute_type type);
+
 }
 
 #endif //AGS_ARE_VK_ENUM_HPP

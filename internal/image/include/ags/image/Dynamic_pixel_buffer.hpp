@@ -1,13 +1,9 @@
-//
-// Created by avereniect on 6/4/22.
-//
-
 #ifndef AGS_IMAGE_DYNAMIC_PIXEL_BUFFER_HPP
 #define AGS_IMAGE_DYNAMIC_PIXEL_BUFFER_HPP
 
 #include <ags/Types.hpp>
 #include <aul/containers/Array_map.hpp>
-#include <aul/containers/Multispan.hpp>
+#include <aul/Span.hpp>
 
 #include <string_view>
 

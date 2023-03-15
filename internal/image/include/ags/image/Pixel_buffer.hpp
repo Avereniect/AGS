@@ -1,7 +1,3 @@
-//
-// Created by avereniect on 11/27/21.
-//
-
 #ifndef AGS_PIXEL_BUFFER_HPP
 #define AGS_PIXEL_BUFFER_HPP
 
@@ -230,9 +226,8 @@ namespace ags::image {
     /// A Pixel_buffer internally represents an image in a way that facilitates
     /// interoperability with other libraries and API's.
     ///
-    /// The image is stored as
-    /// a single contiguous array where the channels of each pixels are
-    /// interleaved, e.g. rgbargbargba
+    /// The image is stored as a single contiguous array where the channels of
+    /// each pixels are interleaved, e.g. rgbargbargba
     ///
     /// \tparam T Channel type
     /// \tparam C Channel count

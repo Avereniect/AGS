@@ -1,7 +1,3 @@
-//
-// Created by avereniect on 11/29/21.
-//
-
 #ifndef AGS_CANVAS_HPP
 #define AGS_CANVAS_HPP
 

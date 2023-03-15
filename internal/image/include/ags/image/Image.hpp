@@ -1,7 +1,3 @@
-//
-// Created by avereniect on 11/27/21.
-//
-
 #ifndef AGS_IMAGE_IMAGE_HPP
 #define AGS_IMAGE_IMAGE_HPP
 

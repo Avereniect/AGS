@@ -1,7 +1,3 @@
-//
-// Created by avereniect on 5/23/22.
-//
-
 #ifndef AGS_THREADING_THREADING_HPP
 #define AGS_THREADING_THREADING_HPP
 

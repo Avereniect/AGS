@@ -1,7 +1,3 @@
-//
-// Created by avereniect on 12/22/21.
-//
-
 #ifndef AGS_ARE_CAMERA_HPP
 #define AGS_ARE_CAMERA_HPP
 
@@ -42,6 +38,7 @@ namespace ags::apt {
         /// Camera focal length
         ///
         real focal_length = 1.0;
+
     };
 
 }

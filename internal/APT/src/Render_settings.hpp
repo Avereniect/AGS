@@ -1,13 +1,12 @@
-//
-// Created by avereniect on 12/22/21.
-//
-
 #ifndef AGS_ARE_RENDER_SETTINGS_HPP
 #define AGS_ARE_RENDER_SETTINGS_HPP
 
 #include <cstdint>
 
+#include <aul/Span.hpp>
+
 #include "Common.hpp"
+#include "Camera.hpp"
 
 namespace ags::apt {
 
@@ -42,6 +41,12 @@ namespace ags::apt {
         STRATIFIED_NOISE
     };
 
+    enum class Shadow_ray_sampling {
+        SAMPLE_ALL,
+        SAMPLE_RANDOM,
+        // MULTIPLE_IMPORTANCE_LIGHT_TREE
+    };
+
     ///
     /// Struct containing the settings used for rendering by APT.
     ///
@@ -55,6 +60,8 @@ namespace ags::apt {
         std::uint32_t thread_count = 4;
 
         std::uint32_t recursion_depth_limit = 1;
+
+        aul::Span<Camera> cameras;
     };
 
 }

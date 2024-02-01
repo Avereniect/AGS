@@ -53,7 +53,7 @@ namespace ags::apt {
     // class LBVH8
     //=========================================================================
 
-    LBVH8::LBVH8(aul::Span<BVH_AABB> aabbs):
+    LBVH8::LBVH8(aul::Span<const BVH_AABB> aabbs):
         elements(build_heap(aabbs)) {}
 
     std::uint32_t LBVH8::trace_ray(vec3r o, uvec3r dir) const {

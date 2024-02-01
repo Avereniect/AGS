@@ -31,7 +31,7 @@ namespace ags::apt {
         // -ctors
         //=================================================
 
-        explicit LBVH8(aul::Span<BVH_AABB> aabbs);
+        explicit LBVH8(aul::Span<const BVH_AABB> aabbs);
 
         LBVH8() = default;
         LBVH8(const LBVH8&) = default;
